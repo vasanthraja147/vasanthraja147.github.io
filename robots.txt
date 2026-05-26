@@ -1,11 +1,11 @@
 # Robots.txt — Vasanthkumar R Portfolio
-# https://vasanthraja123.github.io/
+# https://vasanthraja147.github.io/
 
 User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://vasanthraja123.github.io/sitemap.xml
+Sitemap: https://vasanthraja147.github.io/sitemap.xml
 
 # Block crawlers from accessing internal asset folders
 Disallow: /assets/images/projects/Crop-Yield-optimization-/
