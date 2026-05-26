@@ -1,0 +1,17 @@
+# Robots.txt — Vasanthkumar R Portfolio
+# https://vasanthraja123.github.io/
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://vasanthraja123.github.io/sitemap.xml
+
+# Block crawlers from accessing internal asset folders
+Disallow: /assets/images/projects/Crop-Yield-optimization-/
+Disallow: /assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/
+Disallow: /assets/images/projects/Face Recognition Attendance System using faceNet/
+Disallow: /assets/images/projects/Face recognition attendance system using opencv/
+Disallow: /assets/images/projects/Intrusion-Detection-system for Home/
+Disallow: /assets/images/projects/Personal-Healthcare-Records-with-Medication-Tracker/
+Disallow: /assets/images/projects/Quantum-based-Satellite-Land-Monitoring-System/

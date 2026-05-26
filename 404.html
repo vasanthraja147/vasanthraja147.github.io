@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — Page Not Found | Vasanthkumar R</title>
+    <link rel="icon" type="image/png" href="assets/images/brand/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #070B14;
+            --bg2: #0D1220;
+            --border: rgba(255, 255, 255, 0.06);
+            --text: #F3F4F6;
+            --text2: #9CA3AF;
+            --accent: #3B82F6;
+            --cyan: #22D3EE;
+            --purple: #8B5CF6;
+            --green: #10B981;
+        }
+
+        body {
+            font-family: 'Syne', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background grid */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+        }
+
+        /* Animated blobs */
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.35;
+            z-index: 0;
+            animation: blobFloat 12s ease-in-out infinite alternate;
+        }
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--accent), transparent 70%);
+            top: -100px;
+            left: -100px;
+        }
+        .blob-2 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, var(--purple), transparent 70%);
+            bottom: -80px;
+            right: -80px;
+            animation-delay: -4s;
+        }
+        .blob-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, var(--cyan), transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -8s;
+        }
+
+        @keyframes blobFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -20px) scale(1.1); }
+            66% { transform: translate(-20px, 30px) scale(0.95); }
+            100% { transform: translate(10px, -10px) scale(1.05); }
+        }
+
+        /* Main container */
+        .error-container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 24px;
+            max-width: 600px;
+        }
+
+        /* Glitch-style 404 number */
+        .error-code {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(100px, 20vw, 200px);
+            font-weight: 800;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--cyan), var(--accent), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            margin-bottom: 16px;
+            animation: glitchPulse 4s ease-in-out infinite;
+        }
+        .error-code::after {
+            content: '404';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+            animation: glitchFlicker 4s ease-in-out infinite;
+        }
+
+        @keyframes glitchPulse {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.3)); }
+            50% { filter: drop-shadow(0 0 40px rgba(139, 92, 246, 0.4)); }
+        }
+        @keyframes glitchFlicker {
+            0%, 92%, 100% { opacity: 0; transform: translate(0); }
+            93% { opacity: 0.8; transform: translate(-3px, 2px); }
+            94% { opacity: 0; }
+            96% { opacity: 0.6; transform: translate(3px, -1px); }
+            97% { opacity: 0; }
+        }
+
+        /* Terminal-style message */
+        .error-terminal {
+            background: rgba(13, 18, 32, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            backdrop-filter: blur(12px);
+            text-align: left;
+        }
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        .terminal-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .terminal-dot.red { background: #EF4444; }
+        .terminal-dot.yellow { background: #F59E0B; }
+        .terminal-dot.green { background: #10B981; }
+        .terminal-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text2);
+            margin-left: 8px;
+        }
+        .terminal-line {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 2;
+            color: var(--text2);
+        }
+        .terminal-prompt {
+            color: var(--cyan);
+        }
+        .terminal-error {
+            color: #EF4444;
+        }
+        .terminal-success {
+            color: var(--green);
+        }
+        .terminal-cmd {
+            color: var(--text);
+        }
+
+        .error-subtitle {
+            font-family: 'Syne', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        .error-desc {
+            font-size: 14px;
+            color: var(--text2);
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        /* CTA Buttons */
+        .error-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, var(--accent), var(--cyan));
+            color: #fff;
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+        .btn-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.45);
+        }
+        .btn-projects {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            background: transparent;
+            color: var(--text);
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+        .btn-projects:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.15);
+        }
+
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background: var(--cyan);
+            border-radius: 50%;
+            opacity: 0;
+            z-index: 0;
+            animation: particleFloat linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% { opacity: 0; transform: translateY(100vh) scale(0); }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { opacity: 0; transform: translateY(-10vh) scale(1); }
+        }
+
+        /* Navigation logo */
+        .nav-logo {
+            position: fixed;
+            top: 24px;
+            left: 30px;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 24px;
+            color: var(--text);
+            text-decoration: none;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        .nav-logo:hover {
+            color: var(--cyan);
+            text-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .error-code {
+                font-size: 100px;
+            }
+            .error-terminal {
+                padding: 16px;
+            }
+            .terminal-line {
+                font-size: 11px;
+            }
+            .error-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            .btn-home, .btn-projects {
+                width: 100%;
+                max-width: 260px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grid-bg"></div>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <!-- Floating particles -->
+    <div class="particle" style="left:10%; animation-duration:8s; animation-delay:0s;"></div>
+    <div class="particle" style="left:25%; animation-duration:12s; animation-delay:1s;"></div>
+    <div class="particle" style="left:40%; animation-duration:10s; animation-delay:2s;"></div>
+    <div class="particle" style="left:55%; animation-duration:14s; animation-delay:0.5s;"></div>
+    <div class="particle" style="left:70%; animation-duration:9s; animation-delay:3s;"></div>
+    <div class="particle" style="left:85%; animation-duration:11s; animation-delay:1.5s;"></div>
+    <div class="particle" style="left:15%; animation-duration:13s; animation-delay:4s;"></div>
+    <div class="particle" style="left:60%; animation-duration:7s; animation-delay:2.5s;"></div>
+
+    <a href="index.html" class="nav-logo">VR</a>
+
+    <div class="error-container">
+        <div class="error-code">404</div>
+
+        <div class="error-terminal">
+            <div class="terminal-header">
+                <span class="terminal-dot red"></span>
+                <span class="terminal-dot yellow"></span>
+                <span class="terminal-dot green"></span>
+                <span class="terminal-title">vasanth@portfolio ~ $</span>
+            </div>
+            <div class="terminal-line">
+                <span class="terminal-prompt">~ $</span> <span class="terminal-cmd">cd requested_page/</span>
+            </div>
+            <div class="terminal-line">
+                <span class="terminal-error">ERROR:</span> <span>Directory not found in system architecture</span>
+            </div>
+            <div class="terminal-line">
+                <span class="terminal-prompt">~ $</span> <span class="terminal-cmd">suggest --fix</span>
+            </div>
+            <div class="terminal-line">
+                <span class="terminal-success">→</span> <span>Navigate to home directory or explore projects</span>
+            </div>
+        </div>
+
+        <h2 class="error-subtitle">Lost in the system architecture?</h2>
+        <p class="error-desc">
+            The page you're looking for doesn't exist or has been moved.<br>
+            Let's get you back to the main system.
+        </p>
+
+        <div class="error-actions">
+            <a href="index.html" class="btn-home">← Back to Home</a>
+            <a href="index.html#projects" class="btn-projects">View Projects</a>
+        </div>
+    </div>
+</body>
+
+</html>
