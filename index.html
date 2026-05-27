@@ -33,9 +33,16 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=JetBrains+Mono:wght@400&display=swap">
     <link
         href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@300;400;500&display=swap"
-        rel="stylesheet">
+        rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@300;400;500&display=swap"
+            rel="stylesheet">
+    </noscript>
     <style>
         :root {
             --bg: #070B14;
@@ -147,6 +154,8 @@
             pointer-events: none;
             z-index: 0;
             animation: blobFloat 8s ease-in-out infinite alternate;
+            will-change: transform;
+            contain: layout style;
         }
 
         .blob-1 {
@@ -1997,7 +2006,7 @@
 
         @keyframes flowPulse {
             0% {
-                left: 0%;
+                transform: translateX(0%);
                 opacity: 0;
             }
 
@@ -2010,7 +2019,7 @@
             }
 
             100% {
-                left: 100%;
+                transform: translateX(100%);
                 opacity: 0;
             }
         }
@@ -2761,7 +2770,7 @@
 
         @keyframes imageScan {
             0% {
-                top: 0%;
+                transform: translateY(0%);
                 opacity: 0;
             }
 
@@ -2774,7 +2783,7 @@
             }
 
             100% {
-                top: 100%;
+                transform: translateY(100%);
                 opacity: 0;
             }
         }
@@ -2790,6 +2799,7 @@
             filter: blur(12px);
             transition: opacity 0.4s ease;
             animation: spinRing 8s linear infinite;
+            will-change: transform;
         }
 
         .about-photo-wrapper:hover .profile-glow-ring,
@@ -2979,24 +2989,15 @@
 
         @keyframes scannerMotion {
             0% {
-                width: 90px;
-                height: 90px;
-                top: 15%;
-                left: 20%;
+                transform: translate(0%, 0%) scale(1);
             }
 
             50% {
-                width: 110px;
-                height: 110px;
-                top: 30%;
-                left: 45%;
+                transform: translate(25%, 15%) scale(1.22);
             }
 
             100% {
-                width: 95px;
-                height: 95px;
-                top: 10%;
-                left: 60%;
+                transform: translate(40%, -5%) scale(1.05);
             }
         }
 
@@ -3023,11 +3024,11 @@
 
         @keyframes scanLineVertical {
             0% {
-                top: 0%;
+                transform: translateY(0);
             }
 
             100% {
-                top: 100%;
+                transform: translateY(calc(100vh - 2px));
             }
         }
 
@@ -3166,16 +3167,17 @@
         .npk-progress-fill {
             height: 100%;
             border-radius: 4px;
+            transform-origin: left center;
             animation: fillNPK 5s infinite alternate ease-in-out;
         }
 
         @keyframes fillNPK {
             0% {
-                width: 10%;
+                transform: scaleX(0.1);
             }
 
             100% {
-                width: var(--npk-val, 80%);
+                transform: scaleX(1);
             }
         }
 
@@ -3635,6 +3637,29 @@
             .floating-snippet {
                 display: none !important;
                 /* Remove floating clutter on mobile */
+            }
+
+            /* Disable expensive animations on mobile */
+            .blob {
+                animation: none !important;
+                filter: blur(40px) !important;
+            }
+
+            .blob-3 {
+                display: none !important;
+            }
+
+            .profile-glow-ring {
+                animation: none !important;
+                filter: blur(8px) !important;
+            }
+
+            .scanner-grid {
+                animation: none !important;
+            }
+
+            .grid-bg {
+                display: none !important;
             }
 
             /* Header Nav adjustments */
@@ -4152,7 +4177,7 @@
 
             @keyframes flowPulseVertical {
                 0% {
-                    top: 0%;
+                    transform: translateY(0%);
                     opacity: 0;
                 }
 
@@ -4165,7 +4190,7 @@
                 }
 
                 100% {
-                    top: 100%;
+                    transform: translateY(100%);
                     opacity: 0;
                 }
             }
@@ -4262,1209 +4287,1286 @@
     </nav>
 
     <!-- HERO -->
-    <section id="hero">
-        <div class="hero-floating-elements">
-            <div class="floating-snippet snippet-1">import cv2 as cv</div>
-            <div class="floating-snippet snippet-2">model.fit(X_train)</div>
-            <div class="floating-snippet snippet-3">device = "cuda"</div>
-        </div>
+    <!-- MAIN CONTENT -->
+    <main>
+        <section id="hero">
+            <div class="hero-floating-elements">
+                <div class="floating-snippet snippet-1">import cv2 as cv</div>
+                <div class="floating-snippet snippet-2">model.fit(X_train)</div>
+                <div class="floating-snippet snippet-3">device = "cuda"</div>
+            </div>
 
-        <div class="hero-left">
-            <div class="mobile-profile-container">
-                <div class="mobile-profile-wrapper">
-                    <img src="/assets/images/brand/profile.png" alt="Vasanthkumar R" class="mobile-profile-img">
-                    <div class="profile-glow-ring mobile-glow"></div>
-                </div>
-            </div>
-            <div class="hero-badge">
-                <div class="dot"></div>
-                available for opportunities
-            </div>
-            <h1 class="hero-name">
-                <span>Vasanth</span><br>
-                <span>kumar R</span>
-            </h1>
-            <div class="hero-role">
-                <span id="role-text">AI Engineer</span><span class="cursor-blink"></span>
-            </div>
-            <p class="hero-tagline">
-                Creating scalable <strong>AI + Cloud + IoT solutions</strong> designed for real-world impact and
-                intelligent automation.
-            </p>
-            <div class="hero-actions">
-                <a href="#projects" class="btn-primary">View Systems →</a>
-                <a href="#contact" class="btn-secondary">Let's Connect</a>
-                <a href="/assets/docs/Vasanthkumar_R_Resume.pdf" download="Vasanthkumar_R_Resume.pdf"
-                    class="btn-secondary">Download Resume ↓</a>
-            </div>
-        </div>
-
-        <div class="hero-right">
-            <div class="hero-card tilt-container" style="border: 1px solid var(--border);">
-                <div class="hero-card-header">
-                    <div class="scan-wrapper"
-                        style="width:50px; height:50px; border-radius:50%; border: 1px solid var(--border2);">
-                        <div class="profile-scan-line"></div>
-                        <div class="profile-mesh-overlay"></div>
-                        <img src="/assets/images/brand/about-photo.png" alt="Vasanthkumar R" class="hero-profile-img"
-                            style="width:100%; height:100%; object-fit:cover; margin-bottom:0;">
-                    </div>
-                    <div>
-                        <div class="hero-card-title">Vasanthkumar R</div>
-                        <div class="hero-card-sub">AI / ML · Full Stack · IoT</div>
+            <div class="hero-left">
+                <div class="mobile-profile-container">
+                    <div class="mobile-profile-wrapper">
+                        <img fetchpriority="high" decoding="async" src="/assets/images/brand/profile.png"
+                            alt="Vasanthkumar R" class="mobile-profile-img">
+                        <div class="profile-glow-ring mobile-glow"></div>
                     </div>
                 </div>
-                <div class="hero-stats">
-                    <div class="hero-stat">
-                        <div class="hero-stat-num count-up" data-target="7">0</div>
-                        <div class="hero-stat-label">Core Systems</div>
-                    </div>
-                    <div class="hero-stat">
-                        <div class="hero-stat-num count-up" data-target="95">0</div>
-                        <div class="hero-stat-label">CV Accuracy</div>
-                    </div>
-                    <div class="hero-stat" style="grid-column: span 2;">
-                        <div class="hero-stat-num" style="font-size:18px; color:var(--green)">✓ Selected Candidate</div>
-                        <div class="hero-stat-label">Infosys System Engineer</div>
-                    </div>
+                <div class="hero-badge">
+                    <div class="dot"></div>
+                    available for opportunities
                 </div>
-                <div class="tech-orbit">
-                    <div class="tech-pill">Python</div>
-                    <div class="tech-pill">TensorFlow</div>
-                    <div class="tech-pill">OpenCV</div>
-                    <div class="tech-pill">Firebase</div>
-                    <div class="tech-pill">React</div>
-                    <div class="tech-pill">IoT</div>
-                    <div class="tech-pill">MySQL</div>
+                <h1 class="hero-name">
+                    <span>Vasanth</span><br>
+                    <span>kumar R</span>
+                </h1>
+                <div class="hero-role">
+                    <span id="role-text">AI Engineer</span><span class="cursor-blink"></span>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about">
-        <div class="about-grid">
-            <div class="about-left reveal">
-                <div class="about-photo-wrapper" style="position:relative;">
-                    <div class="scan-wrapper">
-                        <div class="profile-scan-line"></div>
-                        <div class="profile-mesh-overlay"></div>
-                        <img src="/assets/images/brand/profile.png" alt="Vasanthkumar R" class="about-photo"
-                            style="display:block;">
-                    </div>
-                    <div class="profile-glow-ring"></div>
-                </div>
-                <div class="about-badge-float">
-                    <div class="about-badge-icon">🧠</div>
-                    <div>
-                        <div class="about-badge-text">Infosys Selected</div>
-                        <div class="about-badge-sub">System Engineer Trainee</div>
-                    </div>
-                </div>
-            </div>
-            <div class="about-right">
-                <span class="section-label reveal">01 / about</span>
-                <h2 class="section-title reveal"
-                    style="text-align:left; margin-bottom:24px; font-size:clamp(32px,3.5vw,44px)">
-                    Engineering systems that <span>think.</span>
-                </h2>
-                <p class="about-intro reveal">
-                    Final-year <strong>B.Tech Information Technology</strong> student at Sri Ramakrishna Engineering
-                    College. I engineer full-stack platforms incorporating <strong>computer vision, IoT, and cloud
-                        networks</strong> to resolve tangible issues across multiple sectors.
+                <p class="hero-tagline">
+                    Creating scalable <strong>AI + Cloud + IoT solutions</strong> designed for real-world impact and
+                    intelligent automation.
                 </p>
-                <div class="about-cards reveal">
-                    <div class="about-card">
-                        <div class="about-card-icon">🤖</div>
-                        <div class="about-card-title">AI Engineer</div>
-                        <div class="about-card-desc">TensorFlow, PyTorch, OpenCV, FaceNet pipelines</div>
-                    </div>
-                    <div class="about-card">
-                        <div class="about-card-icon">⚡</div>
-                        <div class="about-card-title">Full Stack Builder</div>
-                        <div class="about-card-desc">Firebase, React, SQL/NoSQL databases, REST APIs</div>
-                    </div>
-                    <div class="about-card">
-                        <div class="about-card-icon">🔌</div>
-                        <div class="about-card-title">IoT Architect</div>
-                        <div class="about-card-desc">ESP32 integrations, sensory loops, Cloud DB streams</div>
-                    </div>
-                    <div class="about-card">
-                        <div class="about-card-icon">💻</div>
-                        <div class="about-card-title">Active Problem Solver</div>
-                        <div class="about-card-desc">Leetcode profile: vasanth_025</div>
-                    </div>
+                <div class="hero-actions">
+                    <a href="#projects" class="btn-primary">View Systems →</a>
+                    <a href="#contact" class="btn-secondary">Let's Connect</a>
+                    <a href="/assets/docs/Vasanthkumar_R_Resume.pdf" download="Vasanthkumar_R_Resume.pdf"
+                        class="btn-secondary">Download Resume ↓</a>
                 </div>
+            </div>
 
-                <h4 class="modal-subtitle reveal" style="margin-bottom: 20px;">Developer Journey</h4>
-                <div class="timeline reveal">
-                    <div class="timeline-item">
-                        <div class="timeline-year">2020</div>
-                        <div class="timeline-text"><strong>SSLC — 98.6%</strong> · Vishwa Bharathi MHSS</div>
+            <div class="hero-right">
+                <div class="hero-card tilt-container" style="border: 1px solid var(--border);">
+                    <div class="hero-card-header">
+                        <div class="scan-wrapper"
+                            style="width:50px; height:50px; border-radius:50%; border: 1px solid var(--border2);">
+                            <div class="profile-scan-line"></div>
+                            <div class="profile-mesh-overlay"></div>
+                            <img fetchpriority="high" decoding="async" src="/assets/images/brand/about-photo.png"
+                                alt="Vasanthkumar R" class="hero-profile-img"
+                                style="width:100%; height:100%; object-fit:cover; margin-bottom:0;">
+                        </div>
+                        <div>
+                            <div class="hero-card-title">Vasanthkumar R</div>
+                            <div class="hero-card-sub">AI / ML · Full Stack · IoT</div>
+                        </div>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-year">2022</div>
-                        <div class="timeline-text"><strong>HSC — 86.66%</strong> · Pachamuthu MHSS · Enrolled B.Tech IT,
-                            SREC</div>
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <div class="hero-stat-num count-up" data-target="7">0</div>
+                            <div class="hero-stat-label">Core Systems</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-num count-up" data-target="95">0</div>
+                            <div class="hero-stat-label">CV Accuracy</div>
+                        </div>
+                        <div class="hero-stat" style="grid-column: span 2;">
+                            <div class="hero-stat-num" style="font-size:18px; color:var(--green)">✓ Selected Candidate
+                            </div>
+                            <div class="hero-stat-label">Infosys System Engineer</div>
+                        </div>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-year">2023</div>
-                        <div class="timeline-text"><strong>Core AI Exploration</strong> · OpenCV networks, Firebase
-                            backend models</div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-year">2024</div>
-                        <div class="timeline-text"><strong>Systems Development</strong> · Built 7 production-inspired
-                            projects · Quantum Computing seminar, VIT</div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-year">2025</div>
-                        <div class="timeline-text"><strong>Infosys Selected candidate</strong> · Freelancing commercial
-                            store platforms & local shop management tools</div>
+                    <div class="tech-orbit">
+                        <div class="tech-pill">Python</div>
+                        <div class="tech-pill">TensorFlow</div>
+                        <div class="tech-pill">OpenCV</div>
+                        <div class="tech-pill">Firebase</div>
+                        <div class="tech-pill">React</div>
+                        <div class="tech-pill">IoT</div>
+                        <div class="tech-pill">MySQL</div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- PROJECTS -->
-    <section id="projects">
-        <div class="section-header reveal">
-            <span class="section-label">02 / projects</span>
-            <h2 class="section-title">Systems Showcase<span>.</span></h2>
-            <p class="section-desc">Production-style AI, Cloud, and IoT systems engineered with structured technical
-                depth.</p>
-        </div>
-        <div class="divider"></div>
+        <!-- ABOUT -->
+        <section id="about">
+            <div class="about-grid">
+                <div class="about-left reveal">
+                    <div class="about-photo-wrapper" style="position:relative;">
+                        <div class="scan-wrapper">
+                            <div class="profile-scan-line"></div>
+                            <div class="profile-mesh-overlay"></div>
+                            <img fetchpriority="high" decoding="async" src="/assets/images/brand/profile.png"
+                                alt="Vasanthkumar R" class="about-photo" style="display:block;">
+                        </div>
+                        <div class="profile-glow-ring"></div>
+                    </div>
+                    <div class="about-badge-float">
+                        <div class="about-badge-icon">🧠</div>
+                        <div>
+                            <div class="about-badge-text">Infosys Selected</div>
+                            <div class="about-badge-sub">System Engineer Trainee</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-right">
+                    <span class="section-label reveal">01 / about</span>
+                    <h2 class="section-title reveal"
+                        style="text-align:left; margin-bottom:24px; font-size:clamp(32px,3.5vw,44px)">
+                        Engineering systems that <span>think.</span>
+                    </h2>
+                    <p class="about-intro reveal">
+                        Final-year <strong>B.Tech Information Technology</strong> student at Sri Ramakrishna Engineering
+                        College. I engineer full-stack platforms incorporating <strong>computer vision, IoT, and cloud
+                            networks</strong> to resolve tangible issues across multiple sectors.
+                    </p>
+                    <div class="about-cards reveal">
+                        <div class="about-card">
+                            <div class="about-card-icon">🤖</div>
+                            <div class="about-card-title">AI Engineer</div>
+                            <div class="about-card-desc">TensorFlow, PyTorch, OpenCV, FaceNet pipelines</div>
+                        </div>
+                        <div class="about-card">
+                            <div class="about-card-icon">⚡</div>
+                            <div class="about-card-title">Full Stack Builder</div>
+                            <div class="about-card-desc">Firebase, React, SQL/NoSQL databases, REST APIs</div>
+                        </div>
+                        <div class="about-card">
+                            <div class="about-card-icon">🔌</div>
+                            <div class="about-card-title">IoT Architect</div>
+                            <div class="about-card-desc">ESP32 integrations, sensory loops, Cloud DB streams</div>
+                        </div>
+                        <div class="about-card">
+                            <div class="about-card-icon">💻</div>
+                            <div class="about-card-title">Active Problem Solver</div>
+                            <div class="about-card-desc">Leetcode profile: vasanth_025</div>
+                        </div>
+                    </div>
 
-        <div class="projects-container">
-            <!-- Project 1: Healthcare (Featured) -->
-            <div class="project-alternating reveal">
-                <div class="project-visual-side">
-                    <div class="browser-mockup tilt-container" data-project="healthcare"
-                        style="border:1px solid var(--border);">
-                        <div class="gloss-shine"></div>
-                        <div class="browser-header">
-                            <div class="dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
+                    <h3 class="modal-subtitle reveal" style="margin-bottom: 20px;">Developer Journey</h3>
+                    <div class="timeline reveal">
+                        <div class="timeline-item">
+                            <div class="timeline-year">2020</div>
+                            <div class="timeline-text"><strong>SSLC — 98.6%</strong> · Vishwa Bharathi MHSS</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">2022</div>
+                            <div class="timeline-text"><strong>HSC — 86.66%</strong> · Pachamuthu MHSS · Enrolled B.Tech
+                                IT,
+                                SREC</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">2023</div>
+                            <div class="timeline-text"><strong>Core AI Exploration</strong> · OpenCV networks, Firebase
+                                backend models</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">2024</div>
+                            <div class="timeline-text"><strong>Systems Development</strong> · Built 7
+                                production-inspired
+                                projects · Quantum Computing seminar, VIT</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-year">2025</div>
+                            <div class="timeline-text"><strong>Infosys Selected candidate</strong> · Freelancing
+                                commercial
+                                store platforms & local shop management tools</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="projects">
+            <div class="section-header reveal">
+                <span class="section-label">02 / projects</span>
+                <h2 class="section-title">Systems Showcase<span>.</span></h2>
+                <p class="section-desc">Production-style AI, Cloud, and IoT systems engineered with structured technical
+                    depth.</p>
+            </div>
+            <div class="divider"></div>
+
+            <div class="projects-container">
+                <!-- Project 1: Healthcare (Featured) -->
+                <div class="project-alternating reveal">
+                    <div class="project-visual-side">
+                        <div class="browser-mockup tilt-container" data-project="healthcare"
+                            style="border:1px solid var(--border);">
+                            <div class="gloss-shine"></div>
+                            <div class="browser-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <div class="address-bar">
+                                    https://github.com/Vasanthraja123/Personal-Healthcare-Records-with-Medication-Tracker
+                                </div>
                             </div>
-                            <div class="address-bar">
-                                https://github.com/Vasanthraja123/Personal-Healthcare-Records-with-Medication-Tracker
+                            <div class="browser-content">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Personal-Healthcare-Records-with-Medication-Tracker/patient Page.jpg"
+                                    class="slider-img active" alt="Patient page">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Personal-Healthcare-Records-with-Medication-Tracker/Chatbot main.png"
+                                    class="slider-img" alt="Chatbot interface">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Personal-Healthcare-Records-with-Medication-Tracker/Medical traking system(patient service page).png"
+                                    class="slider-img" alt="Patient service dashboard">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Personal-Healthcare-Records-with-Medication-Tracker/Doctor page.jpg"
+                                    class="slider-img" alt="Doctor admin portal">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Personal-Healthcare-Records-with-Medication-Tracker/Diagnos.png"
+                                    class="slider-img" alt="Diagnosis module">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Personal-Healthcare-Records-with-Medication-Tracker/Login page.jpg"
+                                    class="slider-img" alt="Login page">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Personal-Healthcare-Records-with-Medication-Tracker/medicine page.jpg"
+                                    class="slider-img" alt="Medicine tracker page">
+
+                                <button class="slider-arrow prev" onclick="navigateSlide(this, -1)">&#10094;</button>
+                                <button class="slider-arrow next" onclick="navigateSlide(this, 1)">&#10095;</button>
+
+                                <div class="slider-dots">
+                                    <span class="slider-dot active" onclick="jumpToSlide(this, 0)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 1)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 2)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 3)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 4)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 5)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 6)"></span>
+                                </div>
+
+                                <!-- Dynamic App-like Demo Simulator -->
+                                <div class="demo-overlay">
+                                    <div class="demo-title">
+                                        <div class="pulse-dot"></div> CLINICAL AGENT SESSION
+                                    </div>
+                                    <div class="healthcare-demo-container">
+                                        <div class="heart-pulse-box">
+                                            <div
+                                                style="font-size:9px;color:rgba(239,68,68,0.7);font-family:var(--font-mono)">
+                                                ECG BPM</div>
+                                            <div class="heart-rate-number">72</div>
+                                        </div>
+                                        <div
+                                            style="flex:1.5; text-align:left; font-family:var(--font-mono); font-size:8px; color:var(--text2); display:flex; flex-direction:column; gap:4px;">
+                                            <div>[NLP Reminders Queue]</div>
+                                            <div style="color:var(--green)">✓ 08:00 AM - Metformin</div>
+                                            <div style="color:var(--cyan)">⚡ Chatbot: "Next dose at 8:00 PM"</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="browser-content">
-                            <img src="/assets/images/projects/Personal-Healthcare-Records-with-Medication-Tracker/patient Page.jpg"
-                                class="slider-img active" alt="Patient page">
-                            <img src="/assets/images/projects/Personal-Healthcare-Records-with-Medication-Tracker/Chatbot main.png"
-                                class="slider-img" alt="Chatbot interface">
-                            <img src="/assets/images/projects/Personal-Healthcare-Records-with-Medication-Tracker/Medical traking system(patient service page).png"
-                                class="slider-img" alt="Patient service dashboard">
-                            <img src="/assets/images/projects/Personal-Healthcare-Records-with-Medication-Tracker/Doctor page.jpg"
-                                class="slider-img" alt="Doctor admin portal">
-                            <img src="/assets/images/projects/Personal-Healthcare-Records-with-Medication-Tracker/Diagnos.png"
-                                class="slider-img" alt="Diagnosis module">
-                            <img src="/assets/images/projects/Personal-Healthcare-Records-with-Medication-Tracker/Login page.jpg"
-                                class="slider-img" alt="Login page">
-                            <img src="/assets/images/projects/Personal-Healthcare-Records-with-Medication-Tracker/medicine page.jpg"
-                                class="slider-img" alt="Medicine tracker page">
+                    </div>
+                    <div class="project-content-side">
+                        <div class="project-tag">⭐ Featured System</div>
+                        <h3 class="project-title">Personal Healthcare Record with Medication Tracker</h3>
+                        <p class="project-desc">Cloud health platform with integrated NLP virtual assistant. Automates
+                            reminders, coordinates patient-doctor diagnostic updates, and manages encrypted histories.
+                        </p>
+                        <ul class="project-bullets">
+                            <li>Natural language query parser for inputting schedule configurations</li>
+                            <li>Dynamic Doctor panel for prescription updates and diagnostic report indexing</li>
+                            <li>Firebase-synchronized architecture with client caching mechanisms</li>
+                        </ul>
+                        <div class="project-stack">
+                            <span class="stack-tag">Python</span>
+                            <span class="stack-tag">Firebase</span>
+                            <span class="stack-tag">NLP</span>
+                            <span class="stack-tag">Firestore</span>
+                            <span class="stack-tag">HTML/CSS/JS</span>
+                        </div>
+                        <div class="project-links">
+                            <button class="project-link primary" onclick="openCaseStudy('healthcare')">Case
+                                Study</button>
+                            <a href="https://github.com/Vasanthraja123/Personal-Healthcare-Records-with-Medication-Tracker"
+                                target="_blank" class="project-link ghost">Repository</a>
+                        </div>
+                    </div>
+                </div>
 
-                            <button class="slider-arrow prev" onclick="navigateSlide(this, -1)">&#10094;</button>
-                            <button class="slider-arrow next" onclick="navigateSlide(this, 1)">&#10095;</button>
-
-                            <div class="slider-dots">
-                                <span class="slider-dot active" onclick="jumpToSlide(this, 0)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 1)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 2)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 3)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 4)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 5)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 6)"></span>
-                            </div>
-
-                            <!-- Dynamic App-like Demo Simulator -->
-                            <div class="demo-overlay">
-                                <div class="demo-title">
-                                    <div class="pulse-dot"></div> CLINICAL AGENT SESSION
+                <!-- Project 2: Face Attendance System OpenCV -->
+                <div class="project-alternating reveal">
+                    <div class="project-visual-side">
+                        <div class="browser-mockup tilt-container" data-project="attendance"
+                            style="border:1px solid var(--border);">
+                            <div class="gloss-shine"></div>
+                            <div class="browser-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
                                 </div>
-                                <div class="healthcare-demo-container">
-                                    <div class="heart-pulse-box">
+                                <div class="address-bar">
+                                    https://github.com/Vasanthraja123/Face_Attendance_System-using-opencv</div>
+                            </div>
+                            <div class="browser-content">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Face recognition attendance system using opencv/Home page 1.png"
+                                    class="slider-img active" alt="Attendance dashboard main">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Face recognition attendance system using opencv/Home page 2.png"
+                                    class="slider-img" alt="Face recognition camera logs">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Face recognition attendance system using opencv/New employee register page.png"
+                                    class="slider-img" alt="Biometric registration window">
+
+                                <button class="slider-arrow prev" onclick="navigateSlide(this, -1)">&#10094;</button>
+                                <button class="slider-arrow next" onclick="navigateSlide(this, 1)">&#10095;</button>
+
+                                <div class="slider-dots">
+                                    <span class="slider-dot active" onclick="jumpToSlide(this, 0)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 1)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 2)"></span>
+                                </div>
+
+                                <!-- Dynamic App-like Demo Simulator -->
+                                <div class="demo-overlay" style="padding:0;">
+                                    <div class="scanner-view">
+                                        <div class="scanner-dots"></div>
+                                        <div class="scanner-grid"></div>
+                                        <div class="scanner-face-box"></div>
+                                        <div class="scanner-log">
+                                            <div>[INFO] Loading Haar Cascades... Done.</div>
+                                            <div>[INFO] 128-D Embeddings Extracted.</div>
+                                            <div style="color:var(--green)">[SUCCESS] Vasanthkumar Logged at 08:32:10
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-content-side">
+                        <div class="project-tag">Computer Vision</div>
+                        <h3 class="project-title">Biometric Face Attendance System</h3>
+                        <p class="project-desc">A deep learning classification system mapping webcam feeds to verified
+                            identities. Performs instant logging with 95% validation scoring.</p>
+                        <ul class="project-bullets">
+                            <li>OpenCV Haar cascades and facial keypoint alignment pipeline</li>
+                            <li>Automated local database logs synchronized via Python-MySQL hooks</li>
+                            <li>Biometric registration panel with dynamic database image training</li>
+                        </ul>
+                        <div class="project-stack">
+                            <span class="stack-tag">Python</span>
+                            <span class="stack-tag">OpenCV</span>
+                            <span class="stack-tag">MySQL</span>
+                            <span class="stack-tag">Biometrics</span>
+                        </div>
+                        <div class="project-links">
+                            <button class="project-link primary" onclick="openCaseStudy('attendance')">Case
+                                Study</button>
+                            <a href="https://github.com/Vasanthraja123/Face_Attendance_System-using-opencv"
+                                target="_blank" class="project-link ghost">Repository</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3: Intrusion Detection System -->
+                <div class="project-alternating reveal">
+                    <div class="project-visual-side">
+                        <div class="browser-mockup tilt-container" data-project="intrusion"
+                            style="border:1px solid var(--border);">
+                            <div class="gloss-shine"></div>
+                            <div class="browser-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <div class="address-bar">https://github.com/Vasanthraja123/Intrusion-Detection-system
+                                </div>
+                            </div>
+                            <div class="browser-content">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Intrusion-Detection-system for Home/Intrusion-Detection-system for Home.png"
+                                    class="slider-img active" alt="Intrusion alert terminal">
+
+                                <div class="slider-dots" style="display:none;">
+                                    <span class="slider-dot active"></span>
+                                </div>
+
+                                <!-- Dynamic App-like Demo Simulator -->
+                                <div class="demo-overlay" style="padding:0;">
+                                    <div class="radar-box">
+                                        <div class="radar-sweep"></div>
+                                        <div class="radar-dot-target" style="top:30%; left:40%;"></div>
+                                        <div class="radar-dot-target" style="top:70%; left:65%; animation-delay: 0.6s;">
+                                        </div>
                                         <div
-                                            style="font-size:9px;color:rgba(239,68,68,0.7);font-family:var(--font-mono)">
-                                            ECG BPM</div>
-                                        <div class="heart-rate-number">72</div>
+                                            style="position:absolute; top:12px; left:12px; font-family:var(--font-mono); font-size:8px; color:#ef4444; background:rgba(239,68,68,0.1); border:1px solid #ef4444; padding:2px 6px; border-radius:2px; animation:alertBlink 1.5s infinite alternate;">
+                                            ALERT: ESP32 RADAR MOTION DETECTED
+                                        </div>
+                                        <div
+                                            style="position:absolute; bottom:12px; right:12px; font-family:var(--font-mono); font-size:7px; color:var(--text3);">
+                                            FPS: 28 // 2.4GHz Microwave
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-content-side">
+                        <div class="project-tag">IoT Security</div>
+                        <h3 class="project-title">IoT Intrusion Detection Platform</h3>
+                        <p class="project-desc">Bi-sensory intrusion verification system. Leverages microwave radar
+                            models
+                            to trigger recording nodes and stream video output directly to cloud archives.</p>
+                        <ul class="project-bullets">
+                            <li>Radar signals processed on ESP32 to eliminate basic line-of-sight limits</li>
+                            <li>Automated webcam clip captures pushed to cloud storage endpoints</li>
+                            <li>Live web panel dispatching triggers and alert histories instantly</li>
+                        </ul>
+                        <div class="project-stack">
+                            <span class="stack-tag">ESP32</span>
+                            <span class="stack-tag">Firebase Storage</span>
+                            <span class="stack-tag">Python</span>
+                            <span class="stack-tag">Realtime DB</span>
+                            <span class="stack-tag">JS</span>
+                        </div>
+                        <div class="project-links">
+                            <button class="project-link primary" onclick="openCaseStudy('intrusion')">Case
+                                Study</button>
+                            <a href="https://github.com/Vasanthraja123/Intrusion-Detection-system" target="_blank"
+                                class="project-link ghost">Repository</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4: Crop Yield Optimization -->
+                <div class="project-alternating reveal">
+                    <div class="project-visual-side">
+                        <div class="browser-mockup tilt-container" data-project="crop"
+                            style="border:1px solid var(--border);">
+                            <div class="gloss-shine"></div>
+                            <div class="browser-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <div class="address-bar">https://github.com/Vasanthraja123/Crop-Yield-optimization-
+                                </div>
+                            </div>
+                            <div class="browser-content">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Crop-Yield-optimization-/Dashboard1.png"
+                                    class="slider-img active" alt="Crop parameters matrix">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Crop-Yield-optimization-/Dashboard2.png"
+                                    class="slider-img" alt="NPK ratio charts">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Crop-Yield-optimization-/Dashboard3.png"
+                                    class="slider-img" alt="ML prediction visualizer">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Crop-Yield-optimization-/Dashboard4.png"
+                                    class="slider-img" alt="Dashboard analytics view">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Crop-Yield-optimization-/Home1.png" class="slider-img"
+                                    alt="Soil optimization main">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Crop-Yield-optimization-/Home2.png" class="slider-img"
+                                    alt="Home overview panel">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Crop-Yield-optimization-/Home3.png" class="slider-img"
+                                    alt="Home statistics view">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Crop-Yield-optimization-/Alert.png" class="slider-img"
+                                    alt="Alert notification system">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Crop-Yield-optimization-/login.png" class="slider-img"
+                                    alt="Login page">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Crop-Yield-optimization-/signup.png" class="slider-img"
+                                    alt="Signup registration">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Crop-Yield-optimization-/settings.png"
+                                    class="slider-img" alt="Settings configuration">
+
+                                <button class="slider-arrow prev" onclick="navigateSlide(this, -1)">&#10094;</button>
+                                <button class="slider-arrow next" onclick="navigateSlide(this, 1)">&#10095;</button>
+
+                                <div class="slider-dots">
+                                    <span class="slider-dot active" onclick="jumpToSlide(this, 0)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 1)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 2)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 3)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 4)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 5)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 6)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 7)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 8)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 9)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 10)"></span>
+                                </div>
+
+                                <!-- Dynamic App-like Demo Simulator -->
+                                <div class="demo-overlay">
+                                    <div class="demo-title">
+                                        <div class="pulse-dot"></div> SOIL NPK MODEL FEED
+                                    </div>
+                                    <div class="crop-demo-charts">
+                                        <div class="npk-bar-wrap">
+                                            <span class="npk-label">N</span>
+                                            <div class="npk-progress">
+                                                <div class="npk-progress-fill"
+                                                    style="background:#ef4444; --npk-val: 75%;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="npk-bar-wrap">
+                                            <span class="npk-label">P</span>
+                                            <div class="npk-progress">
+                                                <div class="npk-progress-fill"
+                                                    style="background:#3b82f6; --npk-val: 45%;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="npk-bar-wrap">
+                                            <span class="npk-label">K</span>
+                                            <div class="npk-progress">
+                                                <div class="npk-progress-fill"
+                                                    style="background:#eab308; --npk-val: 65%;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="crop-alert-banner">
+                                            RECOMMENDED CROP: RICE (96.2% RF PROBABILITY)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-content-side">
+                        <div class="project-tag">Machine Learning</div>
+                        <h3 class="project-title">Crop Yield Optimization System</h3>
+                        <p class="project-desc">Agricultural sensor network linking hardware inputs (pH, Nitrogen,
+                            Phosphorus, Potassium) with a Random Forest model to predict maximum-yield crops.</p>
+                        <ul class="project-bullets">
+                            <li>Random Forest classification system scoring soil compatibility</li>
+                            <li>Web dashboard mapping real-time nutrient levels and sensor feeds</li>
+                            <li>Warning matrices for highlighting toxic levels or moisture deficits</li>
+                        </ul>
+                        <div class="project-stack">
+                            <span class="stack-tag">Python</span>
+                            <span class="stack-tag">Scikit-Learn</span>
+                            <span class="stack-tag">IoT Sensors</span>
+                            <span class="stack-tag">Flask</span>
+                        </div>
+                        <div class="project-links">
+                            <button class="project-link primary" onclick="openCaseStudy('crop')">Case Study</button>
+                            <a href="https://github.com/Vasanthraja123/Crop-Yield-optimization-" target="_blank"
+                                class="project-link ghost">Repository</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 5: Quantum-based Satellite Land Monitoring System -->
+                <div class="project-alternating reveal">
+                    <div class="project-visual-side">
+                        <div class="browser-mockup tilt-container" data-project="quantum"
+                            style="border:1px solid var(--border);">
+                            <div class="gloss-shine"></div>
+                            <div class="browser-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <div class="address-bar">
+                                    https://github.com/Vasanthraja123/Quantum-based-Satellite-Land-Monitoring-System
+                                </div>
+                            </div>
+                            <div class="browser-content">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Quantum-based-Satellite-Land-Monitoring-System/Predict%20page.png"
+                                    class="slider-img active" alt="Geospatial band mapping">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Quantum-based-Satellite-Land-Monitoring-System/result%20page.png"
+                                    class="slider-img" alt="Terrain classification output">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Quantum-based-Satellite-Land-Monitoring-System/training%20page.png"
+                                    class="slider-img" alt="Quantum simulator training logs">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Quantum-based-Satellite-Land-Monitoring-System/about%20page.png"
+                                    class="slider-img" alt="About page overview">
+
+                                <button class="slider-arrow prev" onclick="navigateSlide(this, -1)">&#10094;</button>
+                                <button class="slider-arrow next" onclick="navigateSlide(this, 1)">&#10095;</button>
+
+                                <div class="slider-dots">
+                                    <span class="slider-dot active" onclick="jumpToSlide(this, 0)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 1)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 2)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 3)"></span>
+                                </div>
+
+                                <!-- Dynamic App-like Demo Simulator -->
+                                <div class="demo-overlay" style="padding:0;">
+                                    <div class="quantum-demo-grid">
+                                        <div class="quantum-block"></div>
+                                        <div class="quantum-block" style="animation-delay:0.2s"></div>
+                                        <div class="quantum-block" style="animation-delay:0.4s"></div>
+                                        <div class="quantum-block" style="animation-delay:0.6s"></div>
+                                        <div class="quantum-block" style="animation-delay:0.8s"></div>
+                                        <div class="quantum-block" style="animation-delay:1.0s"></div>
+                                        <div class="quantum-block" style="animation-delay:1.2s"></div>
+                                        <div class="quantum-block" style="animation-delay:1.4s"></div>
+                                        <div class="quantum-block" style="animation-delay:0.3s"></div>
+                                        <div class="quantum-block" style="animation-delay:0.5s"></div>
+                                        <div class="quantum-block" style="animation-delay:0.7s"></div>
+                                        <div class="quantum-block" style="animation-delay:0.9s"></div>
+                                        <div class="quantum-block" style="animation-delay:1.1s"></div>
+                                        <div class="quantum-block" style="animation-delay:1.3s"></div>
+                                        <div class="quantum-block" style="animation-delay:1.5s"></div>
+                                        <div class="quantum-block" style="animation-delay:1.7s"></div>
+                                        <div
+                                            style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; background:rgba(5,8,17,0.65); pointer-events:none;">
+                                            <div class="demo-title" style="color:var(--purple);">
+                                                <div class="pulse-dot"
+                                                    style="background:var(--purple); box-shadow: 0 0 8px var(--purple);">
+                                                </div> QISKIT VARIATIONAL MAP
+                                            </div>
+                                            <div
+                                                style="font-family:var(--font-mono); font-size:8px; color:var(--text2); margin-top:4px;">
+                                                VQE Geospatial Classification Bounds
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-content-side">
+                        <div class="project-tag">Quantum ML</div>
+                        <h3 class="project-title">Quantum Satellite Land Monitoring</h3>
+                        <p class="project-desc">A satellite terrain classifier utilizing variational quantum feature
+                            mapping
+                            to segment geographical bands with high boundary resolution.</p>
+                        <ul class="project-bullets">
+                            <li>Quantum variational circuit simulation built via Qiskit</li>
+                            <li>Preprocesses multispectral imagery through dimensionality mapping</li>
+                            <li>Displays classified matrices distinguishing water, forests, and structures</li>
+                        </ul>
+                        <div class="project-stack">
+                            <span class="stack-tag">Python</span>
+                            <span class="stack-tag">Qiskit</span>
+                            <span class="stack-tag">Geospatial</span>
+                            <span class="stack-tag">SVM</span>
+                        </div>
+                        <div class="project-links">
+                            <button class="project-link primary" onclick="openCaseStudy('quantum')">Case Study</button>
+                            <a href="https://github.com/Vasanthraja123/Quantum-based-Satellite-Land-Monitoring-System"
+                                target="_blank" class="project-link ghost">Repository</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 6: E-Commerce cleaning products -->
+                <div class="project-alternating reveal">
+                    <div class="project-visual-side">
+                        <div class="browser-mockup tilt-container" data-project="ecommerce"
+                            style="border:1px solid var(--border);">
+                            <div class="gloss-shine"></div>
+                            <div class="browser-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <div class="address-bar">
+                                    https://github.com/Vasanthraja123/E-Commerce-platform-for-Home-cleaning-Product
+                                </div>
+                            </div>
+                            <div class="browser-content">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/Home page.png"
+                                    class="slider-img active" alt="E-Commerce landing UI">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/POS page.png"
+                                    class="slider-img" alt="POS retail terminal">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/Dashboard.png"
+                                    class="slider-img" alt="Store analytics dashboard">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/Product stock.png"
+                                    class="slider-img" alt="Product stock editor">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/Admin login.png"
+                                    class="slider-img" alt="Admin login panel">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/Customer login.png"
+                                    class="slider-img" alt="Customer login page">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/Customer management page.png"
+                                    class="slider-img" alt="Customer management dashboard">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/Order page.png"
+                                    class="slider-img" alt="Order management page">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/Product page.png"
+                                    class="slider-img" alt="Product catalog page">
+
+                                <button class="slider-arrow prev" onclick="navigateSlide(this, -1)">&#10094;</button>
+                                <button class="slider-arrow next" onclick="navigateSlide(this, 1)">&#10095;</button>
+
+                                <div class="slider-dots">
+                                    <span class="slider-dot active" onclick="jumpToSlide(this, 0)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 1)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 2)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 3)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 4)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 5)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 6)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 7)"></span>
+                                    <span class="slider-dot" onclick="jumpToSlide(this, 8)"></span>
+                                </div>
+
+                                <!-- Dynamic App-like Demo Simulator -->
+                                <div class="demo-overlay">
+                                    <div class="demo-title">
+                                        <div class="pulse-dot"></div> checkout invoice parser
                                     </div>
                                     <div
-                                        style="flex:1.5; text-align:left; font-family:var(--font-mono); font-size:8px; color:var(--text2); display:flex; flex-direction:column; gap:4px;">
-                                        <div>[NLP Reminders Queue]</div>
-                                        <div style="color:var(--green)">✓ 08:00 AM - Metformin</div>
-                                        <div style="color:var(--cyan)">⚡ Chatbot: "Next dose at 8:00 PM"</div>
+                                        style="width:100%; text-align:left; font-family:var(--font-mono); font-size:8px; color:var(--text2); display:flex; flex-direction:column; gap:4px; background:rgba(0,0,0,0.5); padding:8px; border-radius:4px; border:1px solid var(--border);">
+                                        <div
+                                            style="color:var(--cyan); border-bottom:1px solid var(--border2); padding-bottom:4px;">
+                                            ORDER #NR-90214 RECEIVED</div>
+                                        <div>> Cleaner (Eco-Pro 1L) x 2 ... $14.99</div>
+                                        <div>> Refill Bottle Multi x 1 ... $4.50</div>
+                                        <div
+                                            style="color:var(--green); border-top:1px solid var(--border2); padding-top:4px;">
+                                            STATUS: PAID (FIRESTORE SYNC COMPLETE)</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="project-content-side">
-                    <div class="project-tag">⭐ Featured System</div>
-                    <h3 class="project-title">Personal Healthcare Record with Medication Tracker</h3>
-                    <p class="project-desc">Cloud health platform with integrated NLP virtual assistant. Automates
-                        reminders, coordinates patient-doctor diagnostic updates, and manages encrypted histories.</p>
-                    <ul class="project-bullets">
-                        <li>Natural language query parser for inputting schedule configurations</li>
-                        <li>Dynamic Doctor panel for prescription updates and diagnostic report indexing</li>
-                        <li>Firebase-synchronized architecture with client caching mechanisms</li>
-                    </ul>
-                    <div class="project-stack">
-                        <span class="stack-tag">Python</span>
-                        <span class="stack-tag">Firebase</span>
-                        <span class="stack-tag">NLP</span>
-                        <span class="stack-tag">Firestore</span>
-                        <span class="stack-tag">HTML/CSS/JS</span>
+                    <div class="project-content-side">
+                        <div class="project-tag">Client Deployment</div>
+                        <h3 class="project-title">Commercial cleaning E-Commerce & POS</h3>
+                        <p class="project-desc">A business storefront linking customer checkout pages with an inventory
+                            dashboard and retail Point of Sale (POS) console for store staff.</p>
+                        <ul class="project-bullets">
+                            <li>React-based sales catalog and custom invoice compiler</li>
+                            <li>Real-time database triggers updating physical inventory counts</li>
+                            <li>Encrypted administrative panel locking retail analytics securely</li>
+                        </ul>
+                        <div class="project-stack">
+                            <span class="stack-tag">React</span>
+                            <span class="stack-tag">Firebase Auth</span>
+                            <span class="stack-tag">Cloud Storage</span>
+                            <span class="stack-tag">Firestore</span>
+                        </div>
+                        <div class="project-links">
+                            <button class="project-link primary" onclick="openCaseStudy('ecommerce')">Case
+                                Study</button>
+                            <a href="https://github.com/Vasanthraja123/E-Commerce-platform-for-Home-cleaning-Product"
+                                target="_blank" class="project-link ghost">Repository</a>
+                        </div>
                     </div>
-                    <div class="project-links">
-                        <button class="project-link primary" onclick="openCaseStudy('healthcare')">Case Study</button>
+                </div>
+
+                <!-- Project 7: FaceNet -->
+                <div class="project-alternating reveal">
+                    <div class="project-visual-side">
+                        <div class="browser-mockup tilt-container" data-project="facenet"
+                            style="border:1px solid var(--border);">
+                            <div class="gloss-shine"></div>
+                            <div class="browser-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <div class="address-bar">https://github.com/Vasanthraja123/Face-detection-using-FaceNet
+                                </div>
+                            </div>
+                            <div class="browser-content">
+                                <img loading="lazy" decoding="async"
+                                    src="/assets/images/projects/Face Recognition Attendance System using faceNet/Face Recognition Attendance System using faceNet.png"
+                                    class="slider-img active" alt="FaceNet accuracy model">
+
+                                <div class="slider-dots" style="display:none;">
+                                    <span class="slider-dot active"></span>
+                                </div>
+
+                                <!-- Dynamic App-like Demo Simulator -->
+                                <div class="demo-overlay" style="padding:0;">
+                                    <div class="scanner-view" style="background:#02040a;">
+                                        <div class="scanner-dots"
+                                            style="background-image:radial-gradient(var(--cyan) 1px, transparent 1px);">
+                                        </div>
+                                        <div class="scanner-grid"
+                                            style="background:linear-gradient(90deg, transparent, var(--cyan), transparent); box-shadow:0 0 12px var(--cyan);">
+                                        </div>
+                                        <div class="scanner-face-box"
+                                            style="border-color:var(--cyan); box-shadow:0 0 10px rgba(6, 182, 212, 0.4); animation:scannerMotion 5s infinite alternate ease-in-out;">
+                                        </div>
+                                        <div class="scanner-log"
+                                            style="border-color:rgba(6,182,212,0.3); color:var(--cyan);">
+                                            <div>[MTCNN] Aligning coordinates... Done.</div>
+                                            <div>[PyTorch] Generating 128-D vector.</div>
+                                            <div style="color:var(--green)">[VERIFIED] Identity: Recruiter [dist: 0.28]
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-content-side">
+                        <div class="project-tag">Deep Learning</div>
+                        <h3 class="project-title">Face Verification using FaceNet</h3>
+                        <p class="project-desc">Facial identification model using PyTorch. Extracts deep embeddings to
+                            verify inputs against verified profile templates via Euclidean metrics.</p>
+                        <ul class="project-bullets">
+                            <li>MTCNN pipeline isolating bounding fields and aligning coordinates</li>
+                            <li>128-dimensional embedding generation models trained in PyTorch</li>
+                            <li>REST endpoints serving inference results under low frame latency</li>
+                        </ul>
+                        <div class="project-stack">
+                            <span class="stack-tag">PyTorch</span>
+                            <span class="stack-tag">FaceNet</span>
+                            <span class="stack-tag">CNN</span>
+                            <span class="stack-tag">Flask</span>
+                            <span class="stack-tag">Python</span>
+                        </div>
+                        <div class="project-links">
+                            <button class="project-link primary" onclick="openCaseStudy('facenet')">Case Study</button>
+                            <a href="https://github.com/Vasanthraja123/Face-detection-using-FaceNet" target="_blank"
+                                class="project-link ghost">Repository</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILLS -->
+        <section id="skills">
+            <div class="section-header reveal">
+                <span class="section-label">03 / skills</span>
+                <h2 class="section-title">Technical <span>Inventory.</span></h2>
+            </div>
+            <div class="divider"></div>
+
+            <div class="skills-grid">
+                <!-- AI & ML -->
+                <div class="skill-card reveal">
+                    <div class="skill-card-header">
+                        <span class="skill-card-icon">🤖</span>
+                        <h3 class="skill-card-title">AI & Computer Vision</h3>
+                    </div>
+                    <div class="skill-badges">
+                        <span class="skill-badge"
+                            data-desc="Python: Advanced. Core backend engine, dataset preprocessors, and mathematical computations.">Python</span>
+                        <span class="skill-badge"
+                            data-desc="TensorFlow: Deep learning model training, layer scaling, and CNN architectures.">TensorFlow</span>
+                        <span class="skill-badge"
+                            data-desc="OpenCV: Image filters, facial keypoint trackers, Haar classifiers, and camera feeds.">OpenCV</span>
+                        <span class="skill-badge"
+                            data-desc="PyTorch: FaceNet integrations, tensor optimization, and geospatial band classifiers.">PyTorch</span>
+                        <span class="skill-badge"
+                            data-desc="Scikit-Learn: Classification algorithms (Random Forest), regression metrics, and PCA models.">Scikit-learn</span>
+                    </div>
+                    <div class="skill-details-zone">Hover over a technology badge above to view expertise details...
+                    </div>
+                </div>
+
+                <!-- Full Stack & Cloud -->
+                <div class="skill-card reveal reveal-delay-1">
+                    <div class="skill-card-header">
+                        <span class="skill-card-icon">☁️</span>
+                        <h3 class="skill-card-title">Cloud & Full Stack</h3>
+                    </div>
+                    <div class="skill-badges">
+                        <span class="skill-badge"
+                            data-desc="Firebase: Storage buckets, security access rules, and real-time trigger pipelines.">Firebase</span>
+                        <span class="skill-badge"
+                            data-desc="React: Interactive admin dashboards, dynamic catalog grids, and state parameters.">React</span>
+                        <span class="skill-badge"
+                            data-desc="JavaScript: Frontend client routing, dynamic interfaces, and API integrations.">JavaScript</span>
+                        <span class="skill-badge"
+                            data-desc="HTML5/CSS3: Custom layouts, animations, mobile frameworks, and glassmorphic designs.">HTML5
+                            / CSS3</span>
+                        <span class="skill-badge"
+                            data-desc="REST APIs: Flask/Express pipelines, data serialization, and response handlers.">REST
+                            APIs</span>
+                    </div>
+                    <div class="skill-details-zone">Hover over a technology badge above to view expertise details...
+                    </div>
+                </div>
+
+                <!-- IoT & Hardware -->
+                <div class="skill-card reveal">
+                    <div class="skill-card-header">
+                        <span class="skill-card-icon">🔌</span>
+                        <h3 class="skill-card-title">IoT & Hardware</h3>
+                    </div>
+                    <div class="skill-badges">
+                        <span class="skill-badge"
+                            data-desc="ESP32: Microcontrollers, network modules, data packaging, and pins mapping.">ESP32</span>
+                        <span class="skill-badge"
+                            data-desc="Sensor Systems: Microwave radar trackers, NPK soil probes, and motion waves.">Sensory
+                            Integration</span>
+                        <span class="skill-badge"
+                            data-desc="Firebase RTDB: Realtime database listener hooks connecting microcontrollers to dashboards.">Realtime
+                            DB Sync</span>
+                        <span class="skill-badge"
+                            data-desc="Hardware Protocols: Wi-Fi, SPI, I2C, and serial transmission protocols.">IoT
+                            Protocols</span>
+                    </div>
+                    <div class="skill-details-zone">Hover over a technology badge above to view expertise details...
+                    </div>
+                </div>
+
+                <!-- Database & Tools -->
+                <div class="skill-card reveal reveal-delay-1">
+                    <div class="skill-card-header">
+                        <span class="skill-card-icon">🛠️</span>
+                        <h3 class="skill-card-title">Databases & Tools</h3>
+                    </div>
+                    <div class="skill-badges">
+                        <span class="skill-badge"
+                            data-desc="MySQL: Relational schemas, indexing, keys constraints, and log tables.">MySQL</span>
+                        <span class="skill-badge"
+                            data-desc="MongoDB: Document collections, aggregation filters, and schema design.">MongoDB</span>
+                        <span class="skill-badge"
+                            data-desc="GitHub: Branch structures, commits pipelines, PRs, and repositories tracking.">GitHub
+                            / Git</span>
+                        <span class="skill-badge"
+                            data-desc="Figma: Custom visual UI mockups, layout paths, and color systems design.">Figma</span>
+                        <span class="skill-badge"
+                            data-desc="Java / C: Object oriented concepts, core structure syntax, and algorithmic logic.">Java
+                            & C</span>
+                    </div>
+                    <div class="skill-details-zone">Hover over a technology badge above to view expertise details...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE -->
+        <section id="experience">
+            <div class="section-header reveal">
+                <span class="section-label">04 / experience</span>
+                <h2 class="section-title">Activity & Selection<span>.</span></h2>
+            </div>
+            <div class="divider"></div>
+
+            <div class="exp-cards">
+                <div class="exp-card reveal">
+                    <div class="exp-logo"
+                        style="background:transparent; padding:0; display:flex; align-items:center; justify-content:center;">
+                        <img loading="lazy" decoding="async" src="/assets/images/brand/infosys-logo.png" alt="Infosys"
+                            style="width:100%; height:100%; object-fit:contain; border-radius:8px;">
+                    </div>
+                    <div>
+                        <div class="exp-role">System Engineer Trainee</div>
+                        <div class="exp-company">
+                            Infosys
+                            <span class="exp-badge badge-placed">✓ Placed Candidate</span>
+                        </div>
+                        <div class="exp-period">2025 — Awaiting Onboarding</div>
+                        <ul class="exp-points">
+                            <li>Selected via campus placements for the System Engineer Trainee cohort at Infosys.</li>
+                            <li>Awaiting physical training schedule; actively building technical platforms and
+                                consulting.
+                            </li>
+                            <li>Developing custom retail checkout dashboards and logistics models for local storefronts.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="exp-card reveal reveal-delay-1">
+                    <div class="exp-logo"
+                        style="background:transparent; padding:0; display:flex; align-items:center; justify-content:center;">
+                        <img loading="lazy" decoding="async" src="/assets/images/brand/freelance-icon.png"
+                            alt="Freelance" style="width:100%; height:100%; object-fit:contain; border-radius:8px;">
+                    </div>
+                    <div>
+                        <div class="exp-role">Freelance Software Architect</div>
+                        <div class="exp-company">
+                            Local Businesses
+                            <span class="exp-badge badge-active">Active Builder</span>
+                        </div>
+                        <div class="exp-period">2024 — Present</div>
+                        <ul class="exp-points">
+                            <li>Consulting local businesses on system automation, databases, and e-commerce setups.</li>
+                            <li>Built and deployed a commercial cleaning brand platform mapping product stocks, admin
+                                invoicing, and retail checkout.</li>
+                            <li>Creating a multi-shop dashboard handling product catalogs, sales logs, and customer
+                                sheets
+                                locally.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="exp-card reveal reveal-delay-2">
+                    <div class="exp-logo" style="background:linear-gradient(135deg,#1E1B4B,#312E81)">
+                        <span style="color:#8B5CF6;font-size:20px">🔬</span>
+                    </div>
+                    <div>
+                        <div class="exp-role">Independent Systems Researcher</div>
+                        <div class="exp-company">
+                            Sri Ramakrishna Engineering College
+                            <span class="exp-badge badge-active">Active</span>
+                        </div>
+                        <div class="exp-period">2023 — Present</div>
+                        <ul class="exp-points">
+                            <li>Completed 7+ distinct AI, cloud, and IoT implementations focusing on edge integrations.
+                            </li>
+                            <li>Attended VIT geospatial and quantum machine learning coding modules (Feb 2024).</li>
+                            <li>Designed complex visual detection models using OpenCV and FaceNet pipelines, optimizing
+                                CPU
+                                runtime.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GITHUB -->
+        <section id="github">
+            <div class="section-header reveal">
+                <span class="section-label">05 / github</span>
+                <h2 class="section-title">Repository Matrix<span>.</span></h2>
+            </div>
+            <div class="divider"></div>
+
+            <div class="github-layout">
+                <div>
+                    <div class="github-card reveal">
+                        <div class="github-profile">
+                            <div class="github-avatar"
+                                style="overflow:hidden; display:flex; align-items:center; justify-content:center; background:transparent;">
+                                <img loading="lazy" decoding="async" src="/assets/images/brand/github-avatar.png"
+                                    alt="Vasanthraja123"
+                                    style="width:100%; height:100%; object-fit:cover; border-radius:inherit;">
+                            </div>
+                            <div>
+                                <div class="github-username">Vasanthraja123</div>
+                                <div class="github-handle">github.com/Vasanthraja123</div>
+                            </div>
+                        </div>
+                        <div class="github-stats-row">
+                            <div class="github-stat">
+                                <div class="github-stat-n">7+</div>
+                                <div class="github-stat-l">Core Repos</div>
+                            </div>
+                            <div class="github-stat">
+                                <div class="github-stat-n">AI/ML</div>
+                                <div class="github-stat-l">Core Focus</div>
+                            </div>
+                            <div class="github-stat">
+                                <div class="github-stat-n">Active</div>
+                                <div class="github-stat-l">Status</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="github-card reveal reveal-delay-1">
+                        <div
+                            style="font-family:var(--font-mono);font-size:11px;color:var(--text3);margin-bottom:12px;letter-spacing:0.06em">
+                            CONTRIBUTION METRIC (SIMULATED)</div>
+                        <div class="contribution-grid" id="contrib-grid"></div>
+                        <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+                            <span style="font-family:var(--font-mono);font-size:10px;color:var(--text3)">Less</span>
+                            <div style="width:10px;height:10px;border-radius:2px;background:var(--surface2)"></div>
+                            <div style="width:10px;height:10px;border-radius:2px;background:rgba(59,130,246,0.2)"></div>
+                            <div style="width:10px;height:10px;border-radius:2px;background:rgba(59,130,246,0.5)"></div>
+                            <div style="width:10px;height:10px;border-radius:2px;background:rgba(59,130,246,0.85)">
+                            </div>
+                            <span style="font-family:var(--font-mono);font-size:10px;color:var(--text3)">More</span>
+                        </div>
+                    </div>
+
+                    <div class="github-card reveal reveal-delay-2">
+                        <div
+                            style="font-family:var(--font-mono);font-size:11px;color:var(--text3);margin-bottom:16px;letter-spacing:0.06em">
+                            REPOSITORIES LANG MATRIX</div>
+                        <div class="lang-bars">
+                            <div class="lang-item">
+                                <span class="lang-name">Python</span>
+                                <div class="lang-bar-wrap">
+                                    <div class="lang-bar" data-width="65"
+                                        style="background:linear-gradient(90deg,#3776AB,#4B9CD3)"></div>
+                                </div>
+                                <span class="lang-pct">65%</span>
+                            </div>
+                            <div class="lang-item">
+                                <span class="lang-name">JavaScript</span>
+                                <div class="lang-bar-wrap">
+                                    <div class="lang-bar" data-width="20"
+                                        style="background:linear-gradient(90deg,#F7DF1E,#E6C800)"></div>
+                                </div>
+                                <span class="lang-pct">20%</span>
+                            </div>
+                            <div class="lang-item">
+                                <span class="lang-name">HTML/CSS</span>
+                                <div class="lang-bar-wrap">
+                                    <div class="lang-bar" data-width="10"
+                                        style="background:linear-gradient(90deg,#E34F26,#F06529)"></div>
+                                </div>
+                                <span class="lang-pct">10%</span>
+                            </div>
+                            <div class="lang-item">
+                                <span class="lang-name">Java/Others</span>
+                                <div class="lang-bar-wrap">
+                                    <div class="lang-bar" data-width="5"
+                                        style="background:linear-gradient(90deg,#ED8B00,#F89820)"></div>
+                                </div>
+                                <span class="lang-pct">5%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div style="font-family:var(--font-mono);font-size:11px;color:var(--text3);margin-bottom:16px;letter-spacing:0.06em"
+                        class="reveal">PINNED SYSTEMS</div>
+                    <div class="repo-list">
                         <a href="https://github.com/Vasanthraja123/Personal-Healthcare-Records-with-Medication-Tracker"
-                            target="_blank" class="project-link ghost">Repository</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Project 2: Face Attendance System OpenCV -->
-            <div class="project-alternating reveal">
-                <div class="project-visual-side">
-                    <div class="browser-mockup tilt-container" data-project="attendance"
-                        style="border:1px solid var(--border);">
-                        <div class="gloss-shine"></div>
-                        <div class="browser-header">
-                            <div class="dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
+                            target="_blank" class="repo-card reveal">
+                            <div class="repo-name">Personal-Healthcare-Records-with-Medication-Tracker</div>
+                            <div class="repo-desc">AI-driven patient diagnostics with natural reminders and cloud
+                                backends.
                             </div>
-                            <div class="address-bar">
-                                https://github.com/Vasanthraja123/Face_Attendance_System-using-opencv</div>
-                        </div>
-                        <div class="browser-content">
-                            <img src="/assets/images/projects/Face recognition attendance system using opencv/Home page 1.png"
-                                class="slider-img active" alt="Attendance dashboard main">
-                            <img src="/assets/images/projects/Face recognition attendance system using opencv/Home page 2.png"
-                                class="slider-img" alt="Face recognition camera logs">
-                            <img src="/assets/images/projects/Face recognition attendance system using opencv/New employee register page.png"
-                                class="slider-img" alt="Biometric registration window">
-
-                            <button class="slider-arrow prev" onclick="navigateSlide(this, -1)">&#10094;</button>
-                            <button class="slider-arrow next" onclick="navigateSlide(this, 1)">&#10095;</button>
-
-                            <div class="slider-dots">
-                                <span class="slider-dot active" onclick="jumpToSlide(this, 0)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 1)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 2)"></span>
-                            </div>
-
-                            <!-- Dynamic App-like Demo Simulator -->
-                            <div class="demo-overlay" style="padding:0;">
-                                <div class="scanner-view">
-                                    <div class="scanner-dots"></div>
-                                    <div class="scanner-grid"></div>
-                                    <div class="scanner-face-box"></div>
-                                    <div class="scanner-log">
-                                        <div>[INFO] Loading Haar Cascades... Done.</div>
-                                        <div>[INFO] 128-D Embeddings Extracted.</div>
-                                        <div style="color:var(--green)">[SUCCESS] Vasanthkumar Logged at 08:32:10</div>
-                                    </div>
+                            <div class="repo-meta">
+                                <div class="repo-lang">
+                                    <div class="lang-dot" style="background:#3776AB"></div> Python
                                 </div>
+                                <div class="repo-lang">🔥 Firebase</div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-content-side">
-                    <div class="project-tag">Computer Vision</div>
-                    <h3 class="project-title">Biometric Face Attendance System</h3>
-                    <p class="project-desc">A deep learning classification system mapping webcam feeds to verified
-                        identities. Performs instant logging with 95% validation scoring.</p>
-                    <ul class="project-bullets">
-                        <li>OpenCV Haar cascades and facial keypoint alignment pipeline</li>
-                        <li>Automated local database logs synchronized via Python-MySQL hooks</li>
-                        <li>Biometric registration panel with dynamic database image training</li>
-                    </ul>
-                    <div class="project-stack">
-                        <span class="stack-tag">Python</span>
-                        <span class="stack-tag">OpenCV</span>
-                        <span class="stack-tag">MySQL</span>
-                        <span class="stack-tag">Biometrics</span>
-                    </div>
-                    <div class="project-links">
-                        <button class="project-link primary" onclick="openCaseStudy('attendance')">Case Study</button>
+                        </a>
                         <a href="https://github.com/Vasanthraja123/Face_Attendance_System-using-opencv" target="_blank"
-                            class="project-link ghost">Repository</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Project 3: Intrusion Detection System -->
-            <div class="project-alternating reveal">
-                <div class="project-visual-side">
-                    <div class="browser-mockup tilt-container" data-project="intrusion"
-                        style="border:1px solid var(--border);">
-                        <div class="gloss-shine"></div>
-                        <div class="browser-header">
-                            <div class="dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
+                            class="repo-card reveal reveal-delay-1">
+                            <div class="repo-name">Face_Attendance_System-using-opencv</div>
+                            <div class="repo-desc">Biometric facial alignment and dynamic log classification feeds.
                             </div>
-                            <div class="address-bar">https://github.com/Vasanthraja123/Intrusion-Detection-system</div>
-                        </div>
-                        <div class="browser-content">
-                            <img src="/assets/images/projects/Intrusion-Detection-system for Home/Intrusion-Detection-system for Home.png"
-                                class="slider-img active" alt="Intrusion alert terminal">
-
-                            <div class="slider-dots" style="display:none;">
-                                <span class="slider-dot active"></span>
-                            </div>
-
-                            <!-- Dynamic App-like Demo Simulator -->
-                            <div class="demo-overlay" style="padding:0;">
-                                <div class="radar-box">
-                                    <div class="radar-sweep"></div>
-                                    <div class="radar-dot-target" style="top:30%; left:40%;"></div>
-                                    <div class="radar-dot-target" style="top:70%; left:65%; animation-delay: 0.6s;">
-                                    </div>
-                                    <div
-                                        style="position:absolute; top:12px; left:12px; font-family:var(--font-mono); font-size:8px; color:#ef4444; background:rgba(239,68,68,0.1); border:1px solid #ef4444; padding:2px 6px; border-radius:2px; animation:alertBlink 1.5s infinite alternate;">
-                                        ALERT: ESP32 RADAR MOTION DETECTED
-                                    </div>
-                                    <div
-                                        style="position:absolute; bottom:12px; right:12px; font-family:var(--font-mono); font-size:7px; color:var(--text3);">
-                                        FPS: 28 // 2.4GHz Microwave
-                                    </div>
+                            <div class="repo-meta">
+                                <div class="repo-lang">
+                                    <div class="lang-dot" style="background:#3776AB"></div> Python
                                 </div>
+                                <div class="repo-lang">👁 OpenCV</div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-content-side">
-                    <div class="project-tag">IoT Security</div>
-                    <h3 class="project-title">IoT Intrusion Detection Platform</h3>
-                    <p class="project-desc">Bi-sensory intrusion verification system. Leverages microwave radar models
-                        to trigger recording nodes and stream video output directly to cloud archives.</p>
-                    <ul class="project-bullets">
-                        <li>Radar signals processed on ESP32 to eliminate basic line-of-sight limits</li>
-                        <li>Automated webcam clip captures pushed to cloud storage endpoints</li>
-                        <li>Live web panel dispatching triggers and alert histories instantly</li>
-                    </ul>
-                    <div class="project-stack">
-                        <span class="stack-tag">ESP32</span>
-                        <span class="stack-tag">Firebase Storage</span>
-                        <span class="stack-tag">Python</span>
-                        <span class="stack-tag">Realtime DB</span>
-                        <span class="stack-tag">JS</span>
-                    </div>
-                    <div class="project-links">
-                        <button class="project-link primary" onclick="openCaseStudy('intrusion')">Case Study</button>
+                        </a>
                         <a href="https://github.com/Vasanthraja123/Intrusion-Detection-system" target="_blank"
-                            class="project-link ghost">Repository</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Project 4: Crop Yield Optimization -->
-            <div class="project-alternating reveal">
-                <div class="project-visual-side">
-                    <div class="browser-mockup tilt-container" data-project="crop"
-                        style="border:1px solid var(--border);">
-                        <div class="gloss-shine"></div>
-                        <div class="browser-header">
-                            <div class="dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
+                            class="repo-card reveal reveal-delay-2">
+                            <div class="repo-name">Intrusion-Detection-system</div>
+                            <div class="repo-desc">Bi-sensory radar motion alerts with cloud recording storage queues.
                             </div>
-                            <div class="address-bar">https://github.com/Vasanthraja123/Crop-Yield-optimization-</div>
-                        </div>
-                        <div class="browser-content">
-                            <img src="/assets/images/projects/Crop-Yield-optimization-/Dashboard1.png"
-                                class="slider-img active" alt="Crop parameters matrix">
-                            <img src="/assets/images/projects/Crop-Yield-optimization-/Dashboard2.png"
-                                class="slider-img" alt="NPK ratio charts">
-                            <img src="/assets/images/projects/Crop-Yield-optimization-/Dashboard3.png"
-                                class="slider-img" alt="ML prediction visualizer">
-                            <img src="/assets/images/projects/Crop-Yield-optimization-/Dashboard4.png"
-                                class="slider-img" alt="Dashboard analytics view">
-                            <img src="/assets/images/projects/Crop-Yield-optimization-/Home1.png" class="slider-img"
-                                alt="Soil optimization main">
-                            <img src="/assets/images/projects/Crop-Yield-optimization-/Home2.png" class="slider-img"
-                                alt="Home overview panel">
-                            <img src="/assets/images/projects/Crop-Yield-optimization-/Home3.png" class="slider-img"
-                                alt="Home statistics view">
-                            <img src="/assets/images/projects/Crop-Yield-optimization-/Alert.png" class="slider-img"
-                                alt="Alert notification system">
-                            <img src="/assets/images/projects/Crop-Yield-optimization-/login.png" class="slider-img"
-                                alt="Login page">
-                            <img src="/assets/images/projects/Crop-Yield-optimization-/signup.png" class="slider-img"
-                                alt="Signup registration">
-                            <img src="/assets/images/projects/Crop-Yield-optimization-/settings.png" class="slider-img"
-                                alt="Settings configuration">
-
-                            <button class="slider-arrow prev" onclick="navigateSlide(this, -1)">&#10094;</button>
-                            <button class="slider-arrow next" onclick="navigateSlide(this, 1)">&#10095;</button>
-
-                            <div class="slider-dots">
-                                <span class="slider-dot active" onclick="jumpToSlide(this, 0)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 1)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 2)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 3)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 4)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 5)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 6)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 7)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 8)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 9)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 10)"></span>
-                            </div>
-
-                            <!-- Dynamic App-like Demo Simulator -->
-                            <div class="demo-overlay">
-                                <div class="demo-title">
-                                    <div class="pulse-dot"></div> SOIL NPK MODEL FEED
+                            <div class="repo-meta">
+                                <div class="repo-lang">
+                                    <div class="lang-dot" style="background:#F7DF1E"></div> JS
                                 </div>
-                                <div class="crop-demo-charts">
-                                    <div class="npk-bar-wrap">
-                                        <span class="npk-label">N</span>
-                                        <div class="npk-progress">
-                                            <div class="npk-progress-fill" style="background:#ef4444; --npk-val: 75%;">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="npk-bar-wrap">
-                                        <span class="npk-label">P</span>
-                                        <div class="npk-progress">
-                                            <div class="npk-progress-fill" style="background:#3b82f6; --npk-val: 45%;">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="npk-bar-wrap">
-                                        <span class="npk-label">K</span>
-                                        <div class="npk-progress">
-                                            <div class="npk-progress-fill" style="background:#eab308; --npk-val: 65%;">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="crop-alert-banner">
-                                        RECOMMENDED CROP: RICE (96.2% RF PROBABILITY)
-                                    </div>
-                                </div>
+                                <div class="repo-lang">🔒 ESP32</div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-content-side">
-                    <div class="project-tag">Machine Learning</div>
-                    <h3 class="project-title">Crop Yield Optimization System</h3>
-                    <p class="project-desc">Agricultural sensor network linking hardware inputs (pH, Nitrogen,
-                        Phosphorus, Potassium) with a Random Forest model to predict maximum-yield crops.</p>
-                    <ul class="project-bullets">
-                        <li>Random Forest classification system scoring soil compatibility</li>
-                        <li>Web dashboard mapping real-time nutrient levels and sensor feeds</li>
-                        <li>Warning matrices for highlighting toxic levels or moisture deficits</li>
-                    </ul>
-                    <div class="project-stack">
-                        <span class="stack-tag">Python</span>
-                        <span class="stack-tag">Scikit-Learn</span>
-                        <span class="stack-tag">IoT Sensors</span>
-                        <span class="stack-tag">Flask</span>
-                    </div>
-                    <div class="project-links">
-                        <button class="project-link primary" onclick="openCaseStudy('crop')">Case Study</button>
-                        <a href="https://github.com/Vasanthraja123/Crop-Yield-optimization-" target="_blank"
-                            class="project-link ghost">Repository</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Project 5: Quantum-based Satellite Land Monitoring System -->
-            <div class="project-alternating reveal">
-                <div class="project-visual-side">
-                    <div class="browser-mockup tilt-container" data-project="quantum"
-                        style="border:1px solid var(--border);">
-                        <div class="gloss-shine"></div>
-                        <div class="browser-header">
-                            <div class="dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
+                        </a>
+                        <div class="repo-card reveal reveal-delay-3"
+                            style="border-style:dashed;border-color:rgba(59,130,246,0.2);cursor:default">
+                            <div class="repo-name" style="color:var(--text3)">🚧 Local Shop Management Platform</div>
+                            <div class="repo-desc">Active Development — Inventory, pricing databases, and billing tools
+                                for
+                                retail.</div>
+                            <div class="repo-meta">
+                                <div class="repo-lang" style="color:var(--green)"><span class="status-dot"></span> In
+                                    Progress</div>
                             </div>
-                            <div class="address-bar">
-                                https://github.com/Vasanthraja123/Quantum-based-Satellite-Land-Monitoring-System</div>
-                        </div>
-                        <div class="browser-content">
-                            <img src="/assets/images/projects/Quantum-based-Satellite-Land-Monitoring-System/Predict%20page.png"
-                                class="slider-img active" alt="Geospatial band mapping">
-                            <img src="/assets/images/projects/Quantum-based-Satellite-Land-Monitoring-System/result%20page.png"
-                                class="slider-img" alt="Terrain classification output">
-                            <img src="/assets/images/projects/Quantum-based-Satellite-Land-Monitoring-System/training%20page.png"
-                                class="slider-img" alt="Quantum simulator training logs">
-                            <img src="/assets/images/projects/Quantum-based-Satellite-Land-Monitoring-System/about%20page.png"
-                                class="slider-img" alt="About page overview">
-
-                            <button class="slider-arrow prev" onclick="navigateSlide(this, -1)">&#10094;</button>
-                            <button class="slider-arrow next" onclick="navigateSlide(this, 1)">&#10095;</button>
-
-                            <div class="slider-dots">
-                                <span class="slider-dot active" onclick="jumpToSlide(this, 0)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 1)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 2)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 3)"></span>
-                            </div>
-
-                            <!-- Dynamic App-like Demo Simulator -->
-                            <div class="demo-overlay" style="padding:0;">
-                                <div class="quantum-demo-grid">
-                                    <div class="quantum-block"></div>
-                                    <div class="quantum-block" style="animation-delay:0.2s"></div>
-                                    <div class="quantum-block" style="animation-delay:0.4s"></div>
-                                    <div class="quantum-block" style="animation-delay:0.6s"></div>
-                                    <div class="quantum-block" style="animation-delay:0.8s"></div>
-                                    <div class="quantum-block" style="animation-delay:1.0s"></div>
-                                    <div class="quantum-block" style="animation-delay:1.2s"></div>
-                                    <div class="quantum-block" style="animation-delay:1.4s"></div>
-                                    <div class="quantum-block" style="animation-delay:0.3s"></div>
-                                    <div class="quantum-block" style="animation-delay:0.5s"></div>
-                                    <div class="quantum-block" style="animation-delay:0.7s"></div>
-                                    <div class="quantum-block" style="animation-delay:0.9s"></div>
-                                    <div class="quantum-block" style="animation-delay:1.1s"></div>
-                                    <div class="quantum-block" style="animation-delay:1.3s"></div>
-                                    <div class="quantum-block" style="animation-delay:1.5s"></div>
-                                    <div class="quantum-block" style="animation-delay:1.7s"></div>
-                                    <div
-                                        style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; background:rgba(5,8,17,0.65); pointer-events:none;">
-                                        <div class="demo-title" style="color:var(--purple);">
-                                            <div class="pulse-dot"
-                                                style="background:var(--purple); box-shadow: 0 0 8px var(--purple);">
-                                            </div> QISKIT VARIATIONAL MAP
-                                        </div>
-                                        <div
-                                            style="font-family:var(--font-mono); font-size:8px; color:var(--text2); margin-top:4px;">
-                                            VQE Geospatial Classification Bounds
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-content-side">
-                    <div class="project-tag">Quantum ML</div>
-                    <h3 class="project-title">Quantum Satellite Land Monitoring</h3>
-                    <p class="project-desc">A satellite terrain classifier utilizing variational quantum feature mapping
-                        to segment geographical bands with high boundary resolution.</p>
-                    <ul class="project-bullets">
-                        <li>Quantum variational circuit simulation built via Qiskit</li>
-                        <li>Preprocesses multispectral imagery through dimensionality mapping</li>
-                        <li>Displays classified matrices distinguishing water, forests, and structures</li>
-                    </ul>
-                    <div class="project-stack">
-                        <span class="stack-tag">Python</span>
-                        <span class="stack-tag">Qiskit</span>
-                        <span class="stack-tag">Geospatial</span>
-                        <span class="stack-tag">SVM</span>
-                    </div>
-                    <div class="project-links">
-                        <button class="project-link primary" onclick="openCaseStudy('quantum')">Case Study</button>
-                        <a href="https://github.com/Vasanthraja123/Quantum-based-Satellite-Land-Monitoring-System"
-                            target="_blank" class="project-link ghost">Repository</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Project 6: E-Commerce cleaning products -->
-            <div class="project-alternating reveal">
-                <div class="project-visual-side">
-                    <div class="browser-mockup tilt-container" data-project="ecommerce"
-                        style="border:1px solid var(--border);">
-                        <div class="gloss-shine"></div>
-                        <div class="browser-header">
-                            <div class="dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
-                            </div>
-                            <div class="address-bar">
-                                https://github.com/Vasanthraja123/E-Commerce-platform-for-Home-cleaning-Product</div>
-                        </div>
-                        <div class="browser-content">
-                            <img src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/Home page.png"
-                                class="slider-img active" alt="E-Commerce landing UI">
-                            <img src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/POS page.png"
-                                class="slider-img" alt="POS retail terminal">
-                            <img src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/Dashboard.png"
-                                class="slider-img" alt="Store analytics dashboard">
-                            <img src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/Product stock.png"
-                                class="slider-img" alt="Product stock editor">
-                            <img src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/Admin login.png"
-                                class="slider-img" alt="Admin login panel">
-                            <img src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/Customer login.png"
-                                class="slider-img" alt="Customer login page">
-                            <img src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/Customer management page.png"
-                                class="slider-img" alt="Customer management dashboard">
-                            <img src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/Order page.png"
-                                class="slider-img" alt="Order management page">
-                            <img src="/assets/images/projects/E-Commerce-platform-for-Home-cleaning-Product/Product page.png"
-                                class="slider-img" alt="Product catalog page">
-
-                            <button class="slider-arrow prev" onclick="navigateSlide(this, -1)">&#10094;</button>
-                            <button class="slider-arrow next" onclick="navigateSlide(this, 1)">&#10095;</button>
-
-                            <div class="slider-dots">
-                                <span class="slider-dot active" onclick="jumpToSlide(this, 0)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 1)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 2)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 3)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 4)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 5)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 6)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 7)"></span>
-                                <span class="slider-dot" onclick="jumpToSlide(this, 8)"></span>
-                            </div>
-
-                            <!-- Dynamic App-like Demo Simulator -->
-                            <div class="demo-overlay">
-                                <div class="demo-title">
-                                    <div class="pulse-dot"></div> checkout invoice parser
-                                </div>
-                                <div
-                                    style="width:100%; text-align:left; font-family:var(--font-mono); font-size:8px; color:var(--text2); display:flex; flex-direction:column; gap:4px; background:rgba(0,0,0,0.5); padding:8px; border-radius:4px; border:1px solid var(--border);">
-                                    <div
-                                        style="color:var(--cyan); border-bottom:1px solid var(--border2); padding-bottom:4px;">
-                                        ORDER #NR-90214 RECEIVED</div>
-                                    <div>> Cleaner (Eco-Pro 1L) x 2 ... $14.99</div>
-                                    <div>> Refill Bottle Multi x 1 ... $4.50</div>
-                                    <div
-                                        style="color:var(--green); border-top:1px solid var(--border2); padding-top:4px;">
-                                        STATUS: PAID (FIRESTORE SYNC COMPLETE)</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-content-side">
-                    <div class="project-tag">Client Deployment</div>
-                    <h3 class="project-title">Commercial cleaning E-Commerce & POS</h3>
-                    <p class="project-desc">A business storefront linking customer checkout pages with an inventory
-                        dashboard and retail Point of Sale (POS) console for store staff.</p>
-                    <ul class="project-bullets">
-                        <li>React-based sales catalog and custom invoice compiler</li>
-                        <li>Real-time database triggers updating physical inventory counts</li>
-                        <li>Encrypted administrative panel locking retail analytics securely</li>
-                    </ul>
-                    <div class="project-stack">
-                        <span class="stack-tag">React</span>
-                        <span class="stack-tag">Firebase Auth</span>
-                        <span class="stack-tag">Cloud Storage</span>
-                        <span class="stack-tag">Firestore</span>
-                    </div>
-                    <div class="project-links">
-                        <button class="project-link primary" onclick="openCaseStudy('ecommerce')">Case Study</button>
-                        <a href="https://github.com/Vasanthraja123/E-Commerce-platform-for-Home-cleaning-Product"
-                            target="_blank" class="project-link ghost">Repository</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Project 7: FaceNet -->
-            <div class="project-alternating reveal">
-                <div class="project-visual-side">
-                    <div class="browser-mockup tilt-container" data-project="facenet"
-                        style="border:1px solid var(--border);">
-                        <div class="gloss-shine"></div>
-                        <div class="browser-header">
-                            <div class="dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
-                            </div>
-                            <div class="address-bar">https://github.com/Vasanthraja123/Face-detection-using-FaceNet
-                            </div>
-                        </div>
-                        <div class="browser-content">
-                            <img src="/assets/images/projects/Face Recognition Attendance System using faceNet/Face Recognition Attendance System using faceNet.png"
-                                class="slider-img active" alt="FaceNet accuracy model">
-
-                            <div class="slider-dots" style="display:none;">
-                                <span class="slider-dot active"></span>
-                            </div>
-
-                            <!-- Dynamic App-like Demo Simulator -->
-                            <div class="demo-overlay" style="padding:0;">
-                                <div class="scanner-view" style="background:#02040a;">
-                                    <div class="scanner-dots"
-                                        style="background-image:radial-gradient(var(--cyan) 1px, transparent 1px);">
-                                    </div>
-                                    <div class="scanner-grid"
-                                        style="background:linear-gradient(90deg, transparent, var(--cyan), transparent); box-shadow:0 0 12px var(--cyan);">
-                                    </div>
-                                    <div class="scanner-face-box"
-                                        style="border-color:var(--cyan); box-shadow:0 0 10px rgba(6, 182, 212, 0.4); animation:scannerMotion 5s infinite alternate ease-in-out;">
-                                    </div>
-                                    <div class="scanner-log"
-                                        style="border-color:rgba(6,182,212,0.3); color:var(--cyan);">
-                                        <div>[MTCNN] Aligning coordinates... Done.</div>
-                                        <div>[PyTorch] Generating 128-D vector.</div>
-                                        <div style="color:var(--green)">[VERIFIED] Identity: Recruiter [dist: 0.28]
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-content-side">
-                    <div class="project-tag">Deep Learning</div>
-                    <h3 class="project-title">Face Verification using FaceNet</h3>
-                    <p class="project-desc">Facial identification model using PyTorch. Extracts deep embeddings to
-                        verify inputs against verified profile templates via Euclidean metrics.</p>
-                    <ul class="project-bullets">
-                        <li>MTCNN pipeline isolating bounding fields and aligning coordinates</li>
-                        <li>128-dimensional embedding generation models trained in PyTorch</li>
-                        <li>REST endpoints serving inference results under low frame latency</li>
-                    </ul>
-                    <div class="project-stack">
-                        <span class="stack-tag">PyTorch</span>
-                        <span class="stack-tag">FaceNet</span>
-                        <span class="stack-tag">CNN</span>
-                        <span class="stack-tag">Flask</span>
-                        <span class="stack-tag">Python</span>
-                    </div>
-                    <div class="project-links">
-                        <button class="project-link primary" onclick="openCaseStudy('facenet')">Case Study</button>
-                        <a href="https://github.com/Vasanthraja123/Face-detection-using-FaceNet" target="_blank"
-                            class="project-link ghost">Repository</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SKILLS -->
-    <section id="skills">
-        <div class="section-header reveal">
-            <span class="section-label">03 / skills</span>
-            <h2 class="section-title">Technical <span>Inventory.</span></h2>
-        </div>
-        <div class="divider"></div>
-
-        <div class="skills-grid">
-            <!-- AI & ML -->
-            <div class="skill-card reveal">
-                <div class="skill-card-header">
-                    <span class="skill-card-icon">🤖</span>
-                    <h3 class="skill-card-title">AI & Computer Vision</h3>
-                </div>
-                <div class="skill-badges">
-                    <span class="skill-badge"
-                        data-desc="Python: Advanced. Core backend engine, dataset preprocessors, and mathematical computations.">Python</span>
-                    <span class="skill-badge"
-                        data-desc="TensorFlow: Deep learning model training, layer scaling, and CNN architectures.">TensorFlow</span>
-                    <span class="skill-badge"
-                        data-desc="OpenCV: Image filters, facial keypoint trackers, Haar classifiers, and camera feeds.">OpenCV</span>
-                    <span class="skill-badge"
-                        data-desc="PyTorch: FaceNet integrations, tensor optimization, and geospatial band classifiers.">PyTorch</span>
-                    <span class="skill-badge"
-                        data-desc="Scikit-Learn: Classification algorithms (Random Forest), regression metrics, and PCA models.">Scikit-learn</span>
-                </div>
-                <div class="skill-details-zone">Hover over a technology badge above to view expertise details...</div>
-            </div>
-
-            <!-- Full Stack & Cloud -->
-            <div class="skill-card reveal reveal-delay-1">
-                <div class="skill-card-header">
-                    <span class="skill-card-icon">☁️</span>
-                    <h3 class="skill-card-title">Cloud & Full Stack</h3>
-                </div>
-                <div class="skill-badges">
-                    <span class="skill-badge"
-                        data-desc="Firebase: Storage buckets, security access rules, and real-time trigger pipelines.">Firebase</span>
-                    <span class="skill-badge"
-                        data-desc="React: Interactive admin dashboards, dynamic catalog grids, and state parameters.">React</span>
-                    <span class="skill-badge"
-                        data-desc="JavaScript: Frontend client routing, dynamic interfaces, and API integrations.">JavaScript</span>
-                    <span class="skill-badge"
-                        data-desc="HTML5/CSS3: Custom layouts, animations, mobile frameworks, and glassmorphic designs.">HTML5
-                        / CSS3</span>
-                    <span class="skill-badge"
-                        data-desc="REST APIs: Flask/Express pipelines, data serialization, and response handlers.">REST
-                        APIs</span>
-                </div>
-                <div class="skill-details-zone">Hover over a technology badge above to view expertise details...</div>
-            </div>
-
-            <!-- IoT & Hardware -->
-            <div class="skill-card reveal">
-                <div class="skill-card-header">
-                    <span class="skill-card-icon">🔌</span>
-                    <h3 class="skill-card-title">IoT & Hardware</h3>
-                </div>
-                <div class="skill-badges">
-                    <span class="skill-badge"
-                        data-desc="ESP32: Microcontrollers, network modules, data packaging, and pins mapping.">ESP32</span>
-                    <span class="skill-badge"
-                        data-desc="Sensor Systems: Microwave radar trackers, NPK soil probes, and motion waves.">Sensory
-                        Integration</span>
-                    <span class="skill-badge"
-                        data-desc="Firebase RTDB: Realtime database listener hooks connecting microcontrollers to dashboards.">Realtime
-                        DB Sync</span>
-                    <span class="skill-badge"
-                        data-desc="Hardware Protocols: Wi-Fi, SPI, I2C, and serial transmission protocols.">IoT
-                        Protocols</span>
-                </div>
-                <div class="skill-details-zone">Hover over a technology badge above to view expertise details...</div>
-            </div>
-
-            <!-- Database & Tools -->
-            <div class="skill-card reveal reveal-delay-1">
-                <div class="skill-card-header">
-                    <span class="skill-card-icon">🛠️</span>
-                    <h3 class="skill-card-title">Databases & Tools</h3>
-                </div>
-                <div class="skill-badges">
-                    <span class="skill-badge"
-                        data-desc="MySQL: Relational schemas, indexing, keys constraints, and log tables.">MySQL</span>
-                    <span class="skill-badge"
-                        data-desc="MongoDB: Document collections, aggregation filters, and schema design.">MongoDB</span>
-                    <span class="skill-badge"
-                        data-desc="GitHub: Branch structures, commits pipelines, PRs, and repositories tracking.">GitHub
-                        / Git</span>
-                    <span class="skill-badge"
-                        data-desc="Figma: Custom visual UI mockups, layout paths, and color systems design.">Figma</span>
-                    <span class="skill-badge"
-                        data-desc="Java / C: Object oriented concepts, core structure syntax, and algorithmic logic.">Java
-                        & C</span>
-                </div>
-                <div class="skill-details-zone">Hover over a technology badge above to view expertise details...</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- EXPERIENCE -->
-    <section id="experience">
-        <div class="section-header reveal">
-            <span class="section-label">04 / experience</span>
-            <h2 class="section-title">Activity & Selection<span>.</span></h2>
-        </div>
-        <div class="divider"></div>
-
-        <div class="exp-cards">
-            <div class="exp-card reveal">
-                <div class="exp-logo"
-                    style="background:transparent; padding:0; display:flex; align-items:center; justify-content:center;">
-                    <img src="/assets/images/brand/infosys-logo.png" alt="Infosys"
-                        style="width:100%; height:100%; object-fit:contain; border-radius:8px;">
-                </div>
-                <div>
-                    <div class="exp-role">System Engineer Trainee</div>
-                    <div class="exp-company">
-                        Infosys
-                        <span class="exp-badge badge-placed">✓ Placed Candidate</span>
-                    </div>
-                    <div class="exp-period">2025 — Awaiting Onboarding</div>
-                    <ul class="exp-points">
-                        <li>Selected via campus placements for the System Engineer Trainee cohort at Infosys.</li>
-                        <li>Awaiting physical training schedule; actively building technical platforms and consulting.
-                        </li>
-                        <li>Developing custom retail checkout dashboards and logistics models for local storefronts.
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="exp-card reveal reveal-delay-1">
-                <div class="exp-logo"
-                    style="background:transparent; padding:0; display:flex; align-items:center; justify-content:center;">
-                    <img src="/assets/images/brand/freelance-icon.png" alt="Freelance"
-                        style="width:100%; height:100%; object-fit:contain; border-radius:8px;">
-                </div>
-                <div>
-                    <div class="exp-role">Freelance Software Architect</div>
-                    <div class="exp-company">
-                        Local Businesses
-                        <span class="exp-badge badge-active">Active Builder</span>
-                    </div>
-                    <div class="exp-period">2024 — Present</div>
-                    <ul class="exp-points">
-                        <li>Consulting local businesses on system automation, databases, and e-commerce setups.</li>
-                        <li>Built and deployed a commercial cleaning brand platform mapping product stocks, admin
-                            invoicing, and retail checkout.</li>
-                        <li>Creating a multi-shop dashboard handling product catalogs, sales logs, and customer sheets
-                            locally.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="exp-card reveal reveal-delay-2">
-                <div class="exp-logo" style="background:linear-gradient(135deg,#1E1B4B,#312E81)">
-                    <span style="color:#8B5CF6;font-size:20px">🔬</span>
-                </div>
-                <div>
-                    <div class="exp-role">Independent Systems Researcher</div>
-                    <div class="exp-company">
-                        Sri Ramakrishna Engineering College
-                        <span class="exp-badge badge-active">Active</span>
-                    </div>
-                    <div class="exp-period">2023 — Present</div>
-                    <ul class="exp-points">
-                        <li>Completed 7+ distinct AI, cloud, and IoT implementations focusing on edge integrations.</li>
-                        <li>Attended VIT geospatial and quantum machine learning coding modules (Feb 2024).</li>
-                        <li>Designed complex visual detection models using OpenCV and FaceNet pipelines, optimizing CPU
-                            runtime.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- GITHUB -->
-    <section id="github">
-        <div class="section-header reveal">
-            <span class="section-label">05 / github</span>
-            <h2 class="section-title">Repository Matrix<span>.</span></h2>
-        </div>
-        <div class="divider"></div>
-
-        <div class="github-layout">
-            <div>
-                <div class="github-card reveal">
-                    <div class="github-profile">
-                        <div class="github-avatar"
-                            style="overflow:hidden; display:flex; align-items:center; justify-content:center; background:transparent;">
-                            <img src="/assets/images/brand/github-avatar.png" alt="Vasanthraja123"
-                                style="width:100%; height:100%; object-fit:cover; border-radius:inherit;">
-                        </div>
-                        <div>
-                            <div class="github-username">Vasanthraja123</div>
-                            <div class="github-handle">github.com/Vasanthraja123</div>
-                        </div>
-                    </div>
-                    <div class="github-stats-row">
-                        <div class="github-stat">
-                            <div class="github-stat-n">7+</div>
-                            <div class="github-stat-l">Core Repos</div>
-                        </div>
-                        <div class="github-stat">
-                            <div class="github-stat-n">AI/ML</div>
-                            <div class="github-stat-l">Core Focus</div>
-                        </div>
-                        <div class="github-stat">
-                            <div class="github-stat-n">Active</div>
-                            <div class="github-stat-l">Status</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="github-card reveal reveal-delay-1">
-                    <div
-                        style="font-family:var(--font-mono);font-size:11px;color:var(--text3);margin-bottom:12px;letter-spacing:0.06em">
-                        CONTRIBUTION METRIC (SIMULATED)</div>
-                    <div class="contribution-grid" id="contrib-grid"></div>
-                    <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
-                        <span style="font-family:var(--font-mono);font-size:10px;color:var(--text3)">Less</span>
-                        <div style="width:10px;height:10px;border-radius:2px;background:var(--surface2)"></div>
-                        <div style="width:10px;height:10px;border-radius:2px;background:rgba(59,130,246,0.2)"></div>
-                        <div style="width:10px;height:10px;border-radius:2px;background:rgba(59,130,246,0.5)"></div>
-                        <div style="width:10px;height:10px;border-radius:2px;background:rgba(59,130,246,0.85)"></div>
-                        <span style="font-family:var(--font-mono);font-size:10px;color:var(--text3)">More</span>
-                    </div>
-                </div>
-
-                <div class="github-card reveal reveal-delay-2">
-                    <div
-                        style="font-family:var(--font-mono);font-size:11px;color:var(--text3);margin-bottom:16px;letter-spacing:0.06em">
-                        REPOSITORIES LANG MATRIX</div>
-                    <div class="lang-bars">
-                        <div class="lang-item">
-                            <span class="lang-name">Python</span>
-                            <div class="lang-bar-wrap">
-                                <div class="lang-bar" data-width="65"
-                                    style="background:linear-gradient(90deg,#3776AB,#4B9CD3)"></div>
-                            </div>
-                            <span class="lang-pct">65%</span>
-                        </div>
-                        <div class="lang-item">
-                            <span class="lang-name">JavaScript</span>
-                            <div class="lang-bar-wrap">
-                                <div class="lang-bar" data-width="20"
-                                    style="background:linear-gradient(90deg,#F7DF1E,#E6C800)"></div>
-                            </div>
-                            <span class="lang-pct">20%</span>
-                        </div>
-                        <div class="lang-item">
-                            <span class="lang-name">HTML/CSS</span>
-                            <div class="lang-bar-wrap">
-                                <div class="lang-bar" data-width="10"
-                                    style="background:linear-gradient(90deg,#E34F26,#F06529)"></div>
-                            </div>
-                            <span class="lang-pct">10%</span>
-                        </div>
-                        <div class="lang-item">
-                            <span class="lang-name">Java/Others</span>
-                            <div class="lang-bar-wrap">
-                                <div class="lang-bar" data-width="5"
-                                    style="background:linear-gradient(90deg,#ED8B00,#F89820)"></div>
-                            </div>
-                            <span class="lang-pct">5%</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div>
-                <div style="font-family:var(--font-mono);font-size:11px;color:var(--text3);margin-bottom:16px;letter-spacing:0.06em"
-                    class="reveal">PINNED SYSTEMS</div>
-                <div class="repo-list">
-                    <a href="https://github.com/Vasanthraja123/Personal-Healthcare-Records-with-Medication-Tracker"
-                        target="_blank" class="repo-card reveal">
-                        <div class="repo-name">Personal-Healthcare-Records-with-Medication-Tracker</div>
-                        <div class="repo-desc">AI-driven patient diagnostics with natural reminders and cloud backends.
-                        </div>
-                        <div class="repo-meta">
-                            <div class="repo-lang">
-                                <div class="lang-dot" style="background:#3776AB"></div> Python
-                            </div>
-                            <div class="repo-lang">🔥 Firebase</div>
-                        </div>
-                    </a>
-                    <a href="https://github.com/Vasanthraja123/Face_Attendance_System-using-opencv" target="_blank"
-                        class="repo-card reveal reveal-delay-1">
-                        <div class="repo-name">Face_Attendance_System-using-opencv</div>
-                        <div class="repo-desc">Biometric facial alignment and dynamic log classification feeds.</div>
-                        <div class="repo-meta">
-                            <div class="repo-lang">
-                                <div class="lang-dot" style="background:#3776AB"></div> Python
-                            </div>
-                            <div class="repo-lang">👁 OpenCV</div>
-                        </div>
-                    </a>
-                    <a href="https://github.com/Vasanthraja123/Intrusion-Detection-system" target="_blank"
-                        class="repo-card reveal reveal-delay-2">
-                        <div class="repo-name">Intrusion-Detection-system</div>
-                        <div class="repo-desc">Bi-sensory radar motion alerts with cloud recording storage queues.</div>
-                        <div class="repo-meta">
-                            <div class="repo-lang">
-                                <div class="lang-dot" style="background:#F7DF1E"></div> JS
-                            </div>
-                            <div class="repo-lang">🔒 ESP32</div>
-                        </div>
-                    </a>
-                    <div class="repo-card reveal reveal-delay-3"
-                        style="border-style:dashed;border-color:rgba(59,130,246,0.2);cursor:default">
-                        <div class="repo-name" style="color:var(--text3)">🚧 Local Shop Management Platform</div>
-                        <div class="repo-desc">Active Development — Inventory, pricing databases, and billing tools for
-                            retail.</div>
-                        <div class="repo-meta">
-                            <div class="repo-lang" style="color:var(--green)"><span class="status-dot"></span> In
-                                Progress</div>
-                        </div>
+            <!-- TERMINAL INTERACTIVE -->
+            <div id="terminal-mini">
+                <div class="terminal reveal">
+                    <div class="terminal-bar">
+                        <div class="mockup-dot red"></div>
+                        <div class="mockup-dot yellow"></div>
+                        <div class="mockup-dot green"></div>
+                        <span>vasanth@portfolio:~ %</span>
+                    </div>
+                    <div class="terminal-body" id="terminal-output">
+                        <div class="t-line"><span class="t-prompt">~ $</span><span class="t-comment"># Click options
+                                below
+                                to query terminal database</span></div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- TERMINAL INTERACTIVE -->
-        <div id="terminal-mini">
-            <div class="terminal reveal">
-                <div class="terminal-bar">
-                    <div class="mockup-dot red"></div>
-                    <div class="mockup-dot yellow"></div>
-                    <div class="mockup-dot green"></div>
-                    <span>vasanth@portfolio:~ %</span>
-                </div>
-                <div class="terminal-body" id="terminal-output">
-                    <div class="t-line"><span class="t-prompt">~ $</span><span class="t-comment"># Click options below
-                            to query terminal database</span></div>
+                <div class="terminal-actions">
+                    <button onclick="runTerminalCmd('about')">&gt; cat about.txt</button>
+                    <button onclick="runTerminalCmd('projects')">&gt; ls projects/</button>
+                    <button onclick="runTerminalCmd('skills')">&gt; echo $skills</button>
+                    <button onclick="runTerminalCmd('contact')">&gt; cat contact.json</button>
                 </div>
             </div>
-            <div class="terminal-actions">
-                <button onclick="runTerminalCmd('about')">&gt; cat about.txt</button>
-                <button onclick="runTerminalCmd('projects')">&gt; ls projects/</button>
-                <button onclick="runTerminalCmd('skills')">&gt; echo $skills</button>
-                <button onclick="runTerminalCmd('contact')">&gt; cat contact.json</button>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- CONTACT -->
-    <section id="contact">
-        <div class="section-header reveal">
-            <span class="section-label">06 / contact</span>
-            <h2 class="section-title">Initiate <span>Connection.</span></h2>
-            <p class="section-desc">Open for development discussions, technical collaborations, and team opportunities.
-            </p>
-        </div>
-        <div class="divider"></div>
-        <div class="contact-grid">
-            <div class="reveal">
-                <p class="contact-text">
-                    I am finalizing local consulting platforms while preparing for onboarding at Infosys. Connect
-                    directly if you have database, AI pipeline, or full-stack requirements.
+        <!-- CONTACT -->
+        <section id="contact">
+            <div class="section-header reveal">
+                <span class="section-label">06 / contact</span>
+                <h2 class="section-title">Initiate <span>Connection.</span></h2>
+                <p class="section-desc">Open for development discussions, technical collaborations, and team
+                    opportunities.
                 </p>
-                <div class="contact-links">
-                    <a href="mailto:rvasanthk876@gmail.com" class="contact-link">
-                        <div class="contact-link-icon" style="background:rgba(239,68,68,0.08)">📧</div>
-                        <div>
-                            <div class="contact-link-label">Email</div>
-                            <div class="contact-link-value">rvasanthk876@gmail.com</div>
-                        </div>
-                        <span class="contact-link-arrow">↗</span>
-                    </a>
-                    <a href="https://www.linkedin.com/in/vasanth-kumar-r-207619258/" target="_blank"
-                        class="contact-link">
-                        <div class="contact-link-icon" style="background:rgba(10,102,194,0.08)">💼</div>
-                        <div>
-                            <div class="contact-link-label">LinkedIn</div>
-                            <div class="contact-link-value">Vasanth Kumar R</div>
-                        </div>
-                        <span class="contact-link-arrow">↗</span>
-                    </a>
-                    <a href="https://github.com/Vasanthraja123" target="_blank" class="contact-link">
-                        <div class="contact-link-icon" style="background:rgba(255,255,255,0.04)">🐙</div>
-                        <div>
-                            <div class="contact-link-label">GitHub</div>
-                            <div class="contact-link-value">Vasanthraja123</div>
-                        </div>
-                        <span class="contact-link-arrow">↗</span>
-                    </a>
-                    <a href="tel:+918610907778" class="contact-link">
-                        <div class="contact-link-icon" style="background:rgba(16,185,129,0.08)">📱</div>
-                        <div>
-                            <div class="contact-link-label">Phone</div>
-                            <div class="contact-link-value">+91 86109 07778</div>
-                        </div>
-                        <span class="contact-link-arrow">↗</span>
-                    </a>
-                </div>
             </div>
+            <div class="divider"></div>
+            <div class="contact-grid">
+                <div class="reveal">
+                    <p class="contact-text">
+                        I am finalizing local consulting platforms while preparing for onboarding at Infosys. Connect
+                        directly if you have database, AI pipeline, or full-stack requirements.
+                    </p>
+                    <div class="contact-links">
+                        <a href="mailto:rvasanthk876@gmail.com" class="contact-link">
+                            <div class="contact-link-icon" style="background:rgba(239,68,68,0.08)">📧</div>
+                            <div>
+                                <div class="contact-link-label">Email</div>
+                                <div class="contact-link-value">rvasanthk876@gmail.com</div>
+                            </div>
+                            <span class="contact-link-arrow">↗</span>
+                        </a>
+                        <a href="https://www.linkedin.com/in/vasanth-kumar-r-207619258/" target="_blank"
+                            class="contact-link">
+                            <div class="contact-link-icon" style="background:rgba(10,102,194,0.08)">💼</div>
+                            <div>
+                                <div class="contact-link-label">LinkedIn</div>
+                                <div class="contact-link-value">Vasanth Kumar R</div>
+                            </div>
+                            <span class="contact-link-arrow">↗</span>
+                        </a>
+                        <a href="https://github.com/Vasanthraja123" target="_blank" class="contact-link">
+                            <div class="contact-link-icon" style="background:rgba(255,255,255,0.04)">🐙</div>
+                            <div>
+                                <div class="contact-link-label">GitHub</div>
+                                <div class="contact-link-value">Vasanthraja123</div>
+                            </div>
+                            <span class="contact-link-arrow">↗</span>
+                        </a>
+                        <a href="tel:+918610907778" class="contact-link">
+                            <div class="contact-link-icon" style="background:rgba(16,185,129,0.08)">📱</div>
+                            <div>
+                                <div class="contact-link-label">Phone</div>
+                                <div class="contact-link-value">+91 86109 07778</div>
+                            </div>
+                            <span class="contact-link-arrow">↗</span>
+                        </a>
+                    </div>
+                </div>
 
-            <div class="reveal reveal-delay-1">
-                <div class="form-group">
-                    <label class="form-label">Identifier Name</label>
-                    <input type="text" class="form-input" id="form-name" placeholder="Recruiter / Collaborator">
+                <div class="reveal reveal-delay-1">
+                    <div class="form-group">
+                        <label class="form-label">Identifier Name</label>
+                        <input type="text" class="form-input" id="form-name" placeholder="Recruiter / Collaborator">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Contact Email</label>
+                        <input type="email" class="form-input" id="form-email" placeholder="you@company.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Message Payload</label>
+                        <textarea class="form-textarea" id="form-msg"
+                            placeholder="Outline your requirements or opportunities..."></textarea>
+                    </div>
+                    <button class="btn-primary" style="width:100%;justify-content:center" onclick="handleFormSubmit()">
+                        Send Message Payload →
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Contact Email</label>
-                    <input type="email" class="form-input" id="form-email" placeholder="you@company.com">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Message Payload</label>
-                    <textarea class="form-textarea" id="form-msg"
-                        placeholder="Outline your requirements or opportunities..."></textarea>
-                </div>
-                <button class="btn-primary" style="width:100%;justify-content:center" onclick="handleFormSubmit()">
-                    Send Message Payload →
-                </button>
             </div>
-        </div>
-    </section>
+        </section>
+
+    </main><!-- end #main -->
 
     <!-- FOOTER -->
     <footer>
