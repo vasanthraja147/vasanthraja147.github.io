@@ -85,27 +85,31 @@
         /* CURSOR */
         .cursor {
             position: fixed;
-            width: 12px;
-            height: 12px;
-            background: var(--accent);
+            width: 10px;
+            height: 10px;
+            background: #fff;
             border-radius: 50%;
             pointer-events: none;
-            z-index: 10000;
+            z-index: 99999;
             transform: translate(-50%, -50%);
-            transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease;
+            transition: transform 0.08s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 16px rgba(6, 182, 212, 0.7);
+            mix-blend-mode: difference;
         }
 
         .cursor-follower {
             position: fixed;
-            width: 36px;
-            height: 36px;
-            border: 1px solid rgba(59, 130, 246, 0.4);
+            width: 32px;
+            height: 32px;
+            border: 1.5px solid rgba(6, 182, 212, 0.85);
             border-radius: 50%;
             pointer-events: none;
-            z-index: 9999;
+            z-index: 99998;
             transform: translate(-50%, -50%);
-            transition: transform 0.18s ease, width 0.25s ease, height 0.25s ease, opacity 0.2s ease;
-            opacity: 0.6;
+            transition: transform 0.16s ease, width 0.25s ease, height 0.25s ease, opacity 0.2s ease, border-color 0.3s ease;
+            opacity: 0.75;
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3), inset 0 0 6px rgba(6, 182, 212, 0.08);
+            background: rgba(6, 182, 212, 0.04);
         }
 
         body:hover .cursor {
@@ -2419,21 +2423,262 @@
             }
         }
 
-        /* PAGE TRANSITION CURTAIN */
-        .page-curtain {
+        /* ═══════════════════════════════════════════
+        CINEMATIC TRANSITION SYSTEM
+        ═══════════════════════════════════════════ */
+        #transition-stage {
             position: fixed;
             inset: 0;
-            background: #050811;
-            z-index: 99998;
-            transform: scaleY(0);
-            transform-origin: bottom;
-            transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1);
+            z-index: 99997;
             pointer-events: none;
+            overflow: hidden;
         }
 
-        .page-curtain.active {
-            transform: scaleY(1);
-            transform-origin: top;
+        /* Shared panel base */
+        .t-panel {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 55%;
+            background: linear-gradient(160deg, #070B14 60%, #0d1630 85%, #0e2040 100%);
+            border: none;
+            transition: transform 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+            will-change: transform;
+        }
+
+        .t-top {
+            top: 0;
+            transform: translateY(-101%);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.25);
+        }
+
+        .t-bottom {
+            bottom: 0;
+            transform: translateY(101%);
+            border-top: 1px solid rgba(99, 102, 241, 0.25);
+        }
+
+        /* Diagonal energy slash */
+        .t-slash {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(115deg,
+                    transparent 0%,
+                    transparent 40%,
+                    rgba(59, 130, 246, 0.18) 49%,
+                    rgba(6, 182, 212, 0.35) 50%,
+                    rgba(59, 130, 246, 0.18) 51%,
+                    transparent 60%,
+                    transparent 100%);
+            opacity: 0;
+            transform: translateX(-110%);
+            transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.1s;
+            will-change: transform;
+        }
+
+        /* Glow fog bloom */
+        .t-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% 50%,
+                    rgba(59, 130, 246, 0.12) 0%,
+                    rgba(99, 102, 241, 0.08) 40%,
+                    transparent 70%);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            will-change: opacity;
+        }
+
+        /* Center light streak */
+        .t-streak {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+            transform: translateY(-50%) scaleX(0);
+            background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.8), rgba(139, 92, 246, 0.6), transparent);
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.5), 0 0 30px rgba(59, 130, 246, 0.3);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s;
+            opacity: 0;
+            will-change: transform;
+        }
+
+        /* ── ACTIVE STATES ── */
+
+        /* Style A: curtain-split — panels drop in */
+        #transition-stage.style-curtain .t-top {
+            transform: translateY(0);
+        }
+
+        #transition-stage.style-curtain .t-bottom {
+            transform: translateY(0);
+        }
+
+        #transition-stage.style-curtain .t-streak {
+            transform: translateY(-50%) scaleX(1);
+            opacity: 1;
+        }
+
+        /* Style A: exit — panels split back out */
+        #transition-stage.style-curtain.revealing .t-top {
+            transform: translateY(-101%);
+            transition-delay: 0s;
+        }
+
+        #transition-stage.style-curtain.revealing .t-bottom {
+            transform: translateY(101%);
+            transition-delay: 0s;
+        }
+
+        #transition-stage.style-curtain.revealing .t-streak {
+            opacity: 0;
+            transition-delay: 0s;
+        }
+
+        /* Style B: energy-sweep — diagonal slash */
+        #transition-stage.style-sweep .t-top {
+            transform: translateY(0);
+        }
+
+        #transition-stage.style-sweep .t-bottom {
+            transform: translateY(0);
+        }
+
+        #transition-stage.style-sweep .t-slash {
+            opacity: 1;
+            transform: translateX(110%);
+        }
+
+        #transition-stage.style-sweep .t-glow {
+            opacity: 1;
+        }
+
+        #transition-stage.style-sweep.revealing .t-top {
+            transform: translateY(-101%);
+        }
+
+        #transition-stage.style-sweep.revealing .t-bottom {
+            transform: translateY(101%);
+        }
+
+        #transition-stage.style-sweep.revealing .t-glow {
+            opacity: 0;
+        }
+
+        /* Style C: geo-fracture — staggered panels */
+        #transition-stage.style-fracture .t-top {
+            transform: translateY(0);
+            transition-duration: 0.4s;
+            transition-delay: 0s;
+        }
+
+        #transition-stage.style-fracture .t-bottom {
+            transform: translateY(0);
+            transition-duration: 0.4s;
+            transition-delay: 0.07s;
+        }
+
+        #transition-stage.style-fracture .t-slash {
+            opacity: 1;
+            transform: translateX(0);
+            transition-duration: 0.35s;
+        }
+
+        #transition-stage.style-fracture .t-streak {
+            transform: translateY(-50%) scaleX(1);
+            opacity: 1;
+        }
+
+        #transition-stage.style-fracture.revealing .t-top {
+            transform: translateY(-101%);
+            transition-delay: 0.06s;
+        }
+
+        #transition-stage.style-fracture.revealing .t-bottom {
+            transform: translateY(101%);
+            transition-delay: 0s;
+        }
+
+        #transition-stage.style-fracture.revealing .t-slash {
+            opacity: 0;
+            transition-duration: 0.25s;
+        }
+
+        #transition-stage.style-fracture.revealing .t-streak {
+            opacity: 0;
+        }
+
+        /* Style D: glow-fade — soft bloom only */
+        #transition-stage.style-glow .t-top {
+            transform: translateY(0);
+            transition-duration: 0.65s;
+        }
+
+        #transition-stage.style-glow .t-bottom {
+            transform: translateY(0);
+            transition-duration: 0.65s;
+        }
+
+        #transition-stage.style-glow .t-glow {
+            opacity: 1;
+            transition-duration: 0.5s;
+        }
+
+        #transition-stage.style-glow.revealing .t-top {
+            transform: translateY(-101%);
+            transition-duration: 0.65s;
+        }
+
+        #transition-stage.style-glow.revealing .t-bottom {
+            transform: translateY(101%);
+            transition-duration: 0.65s;
+        }
+
+        #transition-stage.style-glow.revealing .t-glow {
+            opacity: 0;
+            transition-duration: 0.5s;
+        }
+
+        /* ── MOBILE OVERRIDE (single-axis only, no diagonals) ── */
+        @media (max-width: 768px) {
+            .t-panel {
+                height: 52%;
+            }
+
+            .t-slash {
+                display: none;
+            }
+
+            /* diagonals off on mobile */
+            #transition-stage.style-sweep .t-top {
+                transform: translateY(0);
+            }
+
+            #transition-stage.style-sweep .t-bottom {
+                transform: translateY(0);
+            }
+
+            #transition-stage.style-sweep.revealing .t-top {
+                transform: translateY(-101%);
+            }
+
+            #transition-stage.style-sweep.revealing .t-bottom {
+                transform: translateY(101%);
+            }
+        }
+
+        /* Mobile: simpler horizontal slide */
+        @media (max-width: 768px) {
+            .page-curtain {
+                background: linear-gradient(90deg, #070B14 50%, #0e7490 100%);
+                clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+                transition: clip-path 0.45s cubic-bezier(0.76, 0, 0.24, 1);
+            }
+
+            .page-curtain.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
         }
 
         /* SOUND Design CONTROLLER UI */
@@ -3253,8 +3498,17 @@
             }
 
             .nav-cta {
-                padding: 6px 14px;
-                font-size: 11px;
+                padding: 5px 10px;
+                font-size: 10px;
+                letter-spacing: 0.03em;
+            }
+
+            .nav-resume {
+                display: none;
+            }
+
+            .nav-actions {
+                gap: 6px;
             }
 
             #hero {
@@ -3395,8 +3649,16 @@
             }
 
             .nav-cta {
-                padding: 6px 14px;
-                font-size: 11px;
+                padding: 5px 12px;
+                font-size: 10px;
+            }
+
+            .nav-resume {
+                display: none !important;
+            }
+
+            .nav-actions {
+                gap: 6px;
             }
 
             .sound-toggle-btn {
@@ -3950,8 +4212,14 @@
         </div>
     </div>
 
-    <!-- PAGE TRANSITION CURTAINS -->
-    <div class="page-curtain" id="page-curtain"></div>
+    <!-- CINEMATIC TRANSITION SYSTEM -->
+    <div id="transition-stage" aria-hidden="true">
+        <div class="t-panel t-top"></div>
+        <div class="t-panel t-bottom"></div>
+        <div class="t-slash"></div>
+        <div class="t-glow"></div>
+        <div class="t-streak"></div>
+    </div>
 
     <div class="cursor" id="cursor"></div>
     <div class="cursor-follower" id="cursor-follower"></div>
@@ -3973,7 +4241,9 @@
             <li><a href="#contact" class="nav-link-item">contact</a></li>
             <div class="nav-underline"></div>
         </ul>
-        <div style="display:flex; align-items:center;">
+        <div class="nav-actions" style="display:flex; align-items:center; gap:10px;">
+            <a href="/assets/docs/Vasanthkumar_R_Resume.pdf" download="Vasanthkumar_R_Resume.pdf"
+                class="nav-cta nav-resume">Resume.pdf ↓</a>
             <a href="mailto:rvasanthk876@gmail.com" class="nav-cta">hire_me()</a>
             <button class="sound-toggle-btn muted" id="sound-toggle" title="Toggle audio feedback"
                 onclick="toggleAudio()">
@@ -4022,12 +4292,10 @@
                 intelligent automation.
             </p>
             <div class="hero-actions">
-                <a href="#projects" class="btn-primary">
-                    View Systems →
-                </a>
-                <a href="#contact" class="btn-secondary">
-                    Let's Connect
-                </a>
+                <a href="#projects" class="btn-primary">View Systems →</a>
+                <a href="#contact" class="btn-secondary">Let's Connect</a>
+                <a href="/assets/docs/Vasanthkumar_R_Resume.pdf" download="Vasanthkumar_R_Resume.pdf"
+                    class="btn-secondary">Download Resume ↓</a>
             </div>
         </div>
 
@@ -5201,7 +5469,7 @@
     <!-- FOOTER -->
     <footer>
         <div class="footer-left">
-            Designed & Built by <span>Vasanthkumar R</span> · 2026 · Chennai, Tamil Nadu
+            Designed & Built by <span>Vasanthkumar R</span> · 2026 · Dharmapuri, Tamil Nadu
         </div>
         <div class="footer-right">
             <a href="https://github.com/Vasanthraja123" target="_blank" class="footer-link">GitHub</a>
@@ -5478,41 +5746,53 @@
             });
         }, 5000);
 
-        // NAVIGATION UNDERLINE TRACKER
-        const navLinks = document.querySelectorAll('.nav-link-item');
-        const navUnderline = document.querySelector('.nav-underline');
+        // NAV ACTIVE STATE — scroll-position based (fixes tall section skipping)
+        var navLinks = document.querySelectorAll('.nav-link-item');
+        var navUnderline = document.querySelector('.nav-underline');
 
         function moveUnderline(element) {
-            const rect = element.getBoundingClientRect();
-            const parentRect = element.parentElement.parentElement.getBoundingClientRect();
+            if (!navUnderline || !element) return;
+            var rect = element.getBoundingClientRect();
+            var parentRect = element.parentElement.parentElement.getBoundingClientRect();
             navUnderline.style.width = rect.width + 'px';
             navUnderline.style.left = (rect.left - parentRect.left) + 'px';
         }
 
-        const sections = document.querySelectorAll('section');
-        const navObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const id = entry.target.getAttribute('id');
+        let navClickLocked = false;
 
-                    // Desktop navbar active state
-                    const activeLink = document.querySelector(`.nav-link-item[href="#${id}"]`);
-                    if (activeLink) {
-                        navLinks.forEach(link => link.classList.remove('active'));
-                        activeLink.classList.add('active');
-                        moveUnderline(activeLink);
-                    }
+        function setActiveNav(id) {
+            const activeLink = document.querySelector(`.nav-link-item[href="#${id}"]`);
+            if (activeLink) {
+                navLinks.forEach(link => link.classList.remove('active'));
+                activeLink.classList.add('active');
+                moveUnderline(activeLink);
+            }
+            const activeMobileLink = document.querySelector(`.mobile-nav-item[href="#${id}"]`);
+            if (activeMobileLink) {
+                document.querySelectorAll('.mobile-nav-item').forEach(mLink => mLink.classList.remove('active'));
+                activeMobileLink.classList.add('active');
+            }
+        }
 
-                    // Mobile bottom navigation active state
-                    const activeMobileLink = document.querySelector(`.mobile-nav-item[href="#${id}"]`);
-                    if (activeMobileLink) {
-                        document.querySelectorAll('.mobile-nav-item').forEach(mLink => mLink.classList.remove('active'));
-                        activeMobileLink.classList.add('active');
-                    }
+        function updateNavOnScroll() {
+            if (navClickLocked) return; // ignore during transition
+
+            const sections = document.querySelectorAll('section[id]');
+            const triggerY = window.scrollY + window.innerHeight * 0.35; // 35% from top
+
+            let currentId = null;
+            sections.forEach(sec => {
+                if (sec.offsetTop <= triggerY) {
+                    currentId = sec.getAttribute('id');
                 }
             });
-        }, { threshold: 0.25 });
-        sections.forEach(sec => navObserver.observe(sec));
+
+            if (currentId) setActiveNav(currentId);
+        }
+
+        window.addEventListener('scroll', updateNavOnScroll, { passive: true });
+        // Run once on load to set initial state
+        updateNavOnScroll();
 
         // Window resize adjustment for underline
         window.addEventListener('resize', () => {
@@ -5599,7 +5879,7 @@
         }
 
         // DYNAMIC CASE STUDY DATABASE
-        const projectsData = {
+        var projectsData = {
             "healthcare": {
                 title: "Personal Healthcare Record & Medication Tracker",
                 tag: "⭐ Featured System · AI + Cloud Patient Portal",
@@ -5814,7 +6094,7 @@
             data.screenshots.forEach((src, idx) => {
                 const img = document.createElement('img');
                 // Ensure images resolve correctly both locally and on Vercel (GitHub Pages static path)
-                img.src = src.startsWith('http') ? src : `/assets/images/projects/${encodeURI(src)}`;
+                img.src = src.startsWith('http') ? src : `/assets/images/projects/${src}`;
                 img.className = `slider-img ${idx === 0 ? 'active' : ''}`;
                 img.alt = `Slide ${idx}`;
                 sliderContainer.appendChild(img);
@@ -6148,28 +6428,64 @@
             });
         });
 
-        // PAGE TRANSITION CURTAIN REVEALS
-        function handleLinkClick(e, href) {
-            if (href.startsWith('#')) {
-                e.preventDefault();
-                const target = document.querySelector(href);
-                if (target) {
-                    const curtain = document.getElementById('page-curtain');
-                    if (curtain) {
-                        curtain.classList.add('active');
-                        playSynthSound('curtain');
-                        setTimeout(() => {
-                            target.scrollIntoView({ behavior: 'smooth' });
-                            setTimeout(() => {
-                                curtain.classList.remove('active');
-                            }, 400);
-                        }, 300);
-                    } else {
-                        target.scrollIntoView({ behavior: 'smooth' });
-                    }
-                }
-            }
+        // ═══════════════════════════════════════════
+        // CINEMATIC TRANSITION ENGINE
+        // ═══════════════════════════════════════════
+        const T_STYLES = ['style-curtain', 'style-sweep', 'style-fracture', 'style-glow'];
+        let lastTStyle = '';
+
+        function pickTransitionStyle() {
+            // Never repeat the same style twice in a row
+            let styles = T_STYLES.filter(s => s !== lastTStyle);
+            const chosen = styles[Math.floor(Math.random() * styles.length)];
+            lastTStyle = chosen;
+            return chosen;
         }
+
+        function handleLinkClick(e, href) {
+            if (!href.startsWith('#')) return;
+            e.preventDefault();
+
+            const target = document.querySelector(href);
+            if (!target) return;
+
+            const stage = document.getElementById('transition-stage');
+            if (!stage) { target.scrollIntoView({ behavior: 'smooth' }); return; }
+
+            // Clean any leftover classes
+            stage.className = '';
+            stage.classList.remove('revealing');
+
+            const style = pickTransitionStyle();
+
+            // Lock scroll-spy during transition so click target stays active
+            navClickLocked = true;
+            setActiveNav(href.replace('#', '')); // immediately highlight clicked item
+            clearTimeout(window._navLockTimer);
+            window._navLockTimer = setTimeout(() => { navClickLocked = false; }, 900);
+
+            requestAnimationFrame(() => {
+                stage.classList.add(style);
+                playSynthSound('curtain');
+            });
+
+            // Phase 2 — jump scroll while covered, then reveal
+            setTimeout(() => {
+                target.scrollIntoView({ behavior: 'instant' });
+
+                // Phase 3 — transition OUT (uncover)
+                requestAnimationFrame(() => {
+                    stage.classList.add('revealing');
+                });
+
+                // Phase 4 — clean up after reveal finishes
+                setTimeout(() => {
+                    stage.className = '';
+                }, 700);
+
+            }, 500); // wait for cover animation to finish
+        }
+
 
         // Attach custom transition click triggers to navigation links
         document.querySelectorAll('.nav-link-item, .mobile-nav-item, .nav-logo, .hero-actions a').forEach(link => {
